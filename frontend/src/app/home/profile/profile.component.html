@@ -1,4 +1,31 @@
 <h2>Profiles</h2>
+
+<!-- Add New Profile Form -->
+<form (ngSubmit)="addProfile()" #profileForm="ngForm">
+  <label for="name">Name:</label>
+  <input
+    type="text"
+    id="name"
+    name="name"
+    [(ngModel)]="newProfile.name"
+    required
+  />
+
+  <label for="email">Email:</label>
+  <input
+    type="email"
+    id="email"
+    name="email"
+    [(ngModel)]="newProfile.email"
+    required
+  />
+
+  <button type="submit" [disabled]="!profileForm.form.valid">
+    Add Profile
+  </button>
+</form>
+
+<!-- Display Existing Profiles -->
 <ul>
   <li *ngFor="let profile of profiles">
     {{ profile.name }} - {{ profile.email }}

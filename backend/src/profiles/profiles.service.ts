@@ -1,30 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Profile } from './profile.entity';
-import { Repository } from 'typeorm';
+import { InjectModel } from '@nestjs/mongoose';
+import { Profile, ProfileDocument } from './schemas/profile.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class ProfilesService {
   constructor(
-    @InjectRepository(Profile)
-    private profilesRepository: Repository<Profile>,
+    @InjectModel(Profile.name) private profileModel: Model<ProfileDocument>,
   ) {}
 
-  async findAll(): Promise<Profile[]> {
-    const profiles = await this.profilesRepository.find();
-    if (profiles.length === 0) {
-      const defaultProfiles = [
-        { name: 'John Doe', email: 'john@example.com' },
-        { name: 'Jane Smith', email: 'jane@example.com' },
-      ];
-      await this.profilesRepository.save(defaultProfiles);
-      return defaultProfiles;
-    }
-    return profiles;
+  async create(profileData: Partial<Profile>): Promise<Profile> {
+    const createdProfile = new this.profileModel(profileData);
+    return createdProfile.save();
   }
 
-  create(profileData: Partial<Profile>): Promise<Profile> {
-    const profile = this.profilesRepository.create(profileData);
-    return this.profilesRepository.save(profile);
+  async findAll(): Promise<Profile[]> {
+    return this.profileModel.find().exec();
+  }
+
+  async findOne(id: string): Promise<Profile> {
+    return this.profileModel.findById(id).exec();
+  }
+
+  async update(id: string, updateData: Partial<Profile>): Promise<Profile> {
+    return this.profileModel
+      .findByIdAndUpdate(id, updateData, { new: true })
+      .exec();
+  }
+
+  async remove(id: string): Promise<any> {
+    return this.profileModel.findByIdAndDelete(id).exec();
   }
 }

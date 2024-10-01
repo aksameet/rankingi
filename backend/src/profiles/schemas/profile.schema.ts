@@ -3,14 +3,26 @@ import { Document } from 'mongoose';
 
 export type ProfileDocument = Profile & Document;
 
-@Schema({ collection: 'Profiles' })
+@Schema({
+  collection: 'Profiles',
+  toJSON: {
+    virtuals: true,
+    versionKey: false,
+    transform: (doc, ret) => {
+      ret.id = ret._id; // Map _id to id
+      delete ret._id; // Remove _id
+    },
+  },
+})
 export class Profile {
   @Prop({ required: true })
   name: string;
 
-  //   @Prop({ required: true })
-  //   email: string;
+  @Prop({ required: false })
+  email: string;
 
+  @Prop()
+  image: string;
   // Add additional fields as needed
 }
 

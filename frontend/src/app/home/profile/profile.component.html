@@ -20,6 +20,15 @@
     required
   />
 
+  <label for="image">Profile Picture:</label>
+  <input
+    type="file"
+    id="image"
+    name="image"
+    (change)="onFileSelected($event)"
+    accept="image/*"
+  />
+
   <button type="submit" [disabled]="!profileForm.form.valid">
     Add Profile
   </button>
@@ -28,6 +37,13 @@
 <!-- Display Existing Profiles -->
 <ul>
   <li *ngFor="let profile of profiles">
+    <img
+      *ngIf="profile.image"
+      [src]="'data:image/jpeg;base64,' + profile.image"
+      alt="{{ profile.name }}"
+      width="100"
+    />
     {{ profile.name }} - {{ profile.email }}
+    <button (click)="deleteProfile(profile.id)">Delete</button>
   </li>
 </ul>

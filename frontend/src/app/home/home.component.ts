@@ -6,5 +6,6 @@ import { ProfileComponent } from './profile/profile.component';
   standalone: true,
   imports: [ProfileComponent],
   templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {}

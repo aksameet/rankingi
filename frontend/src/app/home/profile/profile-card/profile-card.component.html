@@ -1,0 +1,19 @@
+<mat-card class="profile-card">
+  <mat-card-header>
+    <div mat-card-avatar class="profile-avatar">
+      <img
+        *ngIf="profile.image"
+        [src]="'data:image/jpeg;base64,' + profile.image"
+        alt="{{ profile.name }}"
+      />
+      <mat-icon *ngIf="!profile.image">person</mat-icon>
+    </div>
+    <mat-card-title>{{ profile.name }}</mat-card-title>
+    <mat-card-subtitle>{{ profile.email }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-actions align="end">
+    <button mat-icon-button color="warn" (click)="onDelete()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -26,6 +26,10 @@ export class ProfileService {
     return this.http.post<Profile>(this.apiUrl, profile);
   }
 
+  updateProfile(profile: Profile): Observable<Profile> {
+    return this.http.put<Profile>(`${this.apiUrl}/${profile.id}`, profile);
+  }
+
   deleteProfile(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

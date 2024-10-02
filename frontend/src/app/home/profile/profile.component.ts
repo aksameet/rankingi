@@ -31,6 +31,7 @@ export class ProfileComponent implements OnInit {
   profiles: Profile[] = [];
   profileForm: FormGroup;
   selectedImage: string | null = null;
+  editingProfileId: string | null = null;
 
   constructor(private profileService: ProfileService) {
     // Initialize the form group with controls and validators
@@ -45,18 +46,16 @@ export class ProfileComponent implements OnInit {
     this.loadProfiles();
   }
 
-  // Load existing profiles
   loadProfiles() {
     this.profileService.getProfiles().subscribe((data) => {
       this.profiles = data;
     });
   }
 
-  // Method to add a new profile
-  addProfile() {
+  addOrUpdateProfile() {
     if (this.profileForm.valid) {
-      const newProfile: Profile = {
-        id: '',
+      const profileData: Profile = {
+        id: this.editingProfileId || '',
         name: this.profileForm.value.name,
         email: this.profileForm.value.email,
       };
@@ -67,19 +66,38 @@ export class ProfileComponent implements OnInit {
           /^data:image\/\w+;base64,/,
           ''
         );
-        newProfile.image = base64Data;
+        profileData.image = base64Data;
       }
 
-      this.profileService.createProfile(newProfile).subscribe(
-        (createdProfile) => {
-          this.profiles.push(createdProfile);
-          this.profileForm.reset();
-          this.selectedImage = null;
-        },
-        (error) => {
-          console.error('Error creating profile:', error);
-        }
-      );
+      if (this.editingProfileId) {
+        // Update existing profile
+        this.profileService.updateProfile(profileData).subscribe(
+          (updatedProfile) => {
+            // Update the profile in the list
+            const index = this.profiles.findIndex(
+              (p) => p.id === updatedProfile.id
+            );
+            if (index !== -1) {
+              this.profiles[index] = updatedProfile;
+            }
+            this.resetForm();
+          },
+          (error) => {
+            console.error('Error updating profile:', error);
+          }
+        );
+      } else {
+        // Add new profile
+        this.profileService.createProfile(profileData).subscribe(
+          (createdProfile) => {
+            this.profiles.push(createdProfile);
+            this.resetForm();
+          },
+          (error) => {
+            console.error('Error creating profile:', error);
+          }
+        );
+      }
     } else {
       // Mark all controls as touched to show validation errors
       this.profileForm.markAllAsTouched();
@@ -112,6 +130,33 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  onEditProfile(profile: Profile) {
+    this.editingProfileId = profile.id;
+
+    // Populate the form with existing profile data
+    this.profileForm.patchValue({
+      name: profile.name,
+      email: profile.email,
+    });
+
+    // If there's an image, set it
+    if (profile.image) {
+      this.selectedImage = 'data:image/jpeg;base64,' + profile.image;
+      this.profileForm.get('image')?.setValue(this.selectedImage);
+    }
+  }
+
+  resetForm() {
+    this.profileForm.reset();
+    this.selectedImage = null;
+    this.editingProfileId = null;
+  }
+
+  clearImage() {
+    this.selectedImage = null;
+    this.profileForm.get('image')?.setValue('');
+  }
+
   deleteProfile(id: string) {
     this.profileService.deleteProfile(id).subscribe(
       () => {
@@ -125,6 +170,9 @@ export class ProfileComponent implements OnInit {
   }
 
   onDeleteProfile(id: string) {
+    if (this.editingProfileId === id) {
+      this.resetForm();
+    }
     this.deleteProfile(id);
   }
 }

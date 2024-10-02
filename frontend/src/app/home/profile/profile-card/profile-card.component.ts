@@ -14,8 +14,13 @@ import { CommonModule } from '@angular/common';
 export class ProfileCardComponent {
   @Input() profile!: Profile;
   @Output() deleteProfile = new EventEmitter<string>();
+  @Output() editProfile = new EventEmitter<Profile>();
 
   onDelete() {
     this.deleteProfile.emit(this.profile.id);
+  }
+
+  onEdit() {
+    this.editProfile.emit(this.profile);
   }
 }

@@ -4,7 +4,7 @@
     <mat-card-title>Add New Profile</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <form [formGroup]="profileForm" (ngSubmit)="addProfile()">
+    <form [formGroup]="profileForm" (ngSubmit)="addOrUpdateProfile()">
       <div class="form-fields">
         <!-- Name Field -->
         <mat-form-field appearance="outline" class="full-width">
@@ -60,6 +60,9 @@
         <!-- Display Selected Image Preview -->
         <div *ngIf="selectedImage" class="image-preview">
           <img [src]="selectedImage" alt="Selected Image" />
+          <button mat-button color="warn" (click)="clearImage()">
+            Remove Image
+          </button>
         </div>
       </div>
 
@@ -72,15 +75,15 @@
           [disabled]="profileForm.invalid"
           class="m-2"
         >
-          Add Profile
+          {{ editingProfileId ? "Update Profile" : "Add Profile" }}
         </button>
         <button
           mat-raised-button
-          color="primary"
-          [disabled]="profileForm.invalid"
-          (onclick)="profileForm.reset()"
+          color="warn"
+          type="button"
+          (click)="resetForm()"
         >
-          Clear
+          Cancel
         </button>
       </mat-card-actions>
     </form>
@@ -94,5 +97,6 @@
     *ngFor="let profile of profiles"
     [profile]="profile"
     (deleteProfile)="onDeleteProfile($event)"
+    (editProfile)="onEditProfile($event)"
   ></app-profile-card>
 </div>

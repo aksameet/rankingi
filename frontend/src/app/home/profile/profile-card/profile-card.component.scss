@@ -29,4 +29,8 @@
   top: -5px;
   right: -5px;
   z-index: 2;
+  & .edit {
+    position: absolute;
+    bottom: -100%;
+  }
 }

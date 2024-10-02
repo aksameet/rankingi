@@ -9,5 +9,8 @@ export class Profile {
   name: string;
 
   @Column()
+  rank: number;
+
+  @Column()
   email: string;
 }

@@ -7,6 +7,7 @@ export interface Profile {
   _id?: string; // Include _id if you want to handle MongoDB document IDs
   name: string;
   email: string;
+  rank: number;
   image?: string;
 }
 

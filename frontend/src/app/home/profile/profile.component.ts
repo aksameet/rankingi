@@ -38,6 +38,7 @@ export class ProfileComponent implements OnInit {
     this.profileForm = new FormGroup({
       name: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required]),
+      rank: new FormControl(0),
       image: new FormControl(null),
     });
   }
@@ -49,6 +50,28 @@ export class ProfileComponent implements OnInit {
   loadProfiles() {
     this.profileService.getProfiles().subscribe((data) => {
       this.profiles = data;
+      this.sortProfiles();
+    });
+  }
+
+  sortProfiles() {
+    this.profiles.sort((a, b) => {
+      const rankA = a.rank;
+      const rankB = b.rank;
+
+      const isRankANull = rankA == null || rankA === 0;
+      const isRankBNull = rankB == null || rankB === 0;
+
+      if (isRankANull && isRankBNull) {
+        return 0; // Both ranks are null, undefined, or 0
+      }
+      if (isRankANull) {
+        return 1; // 'a' has no rank or rank 0, place it after 'b'
+      }
+      if (isRankBNull) {
+        return -1; // 'b' has no rank or rank 0, place 'a' before 'b'
+      }
+      return rankA - rankB; // Both ranks are valid numbers, sort normally
     });
   }
 
@@ -58,6 +81,8 @@ export class ProfileComponent implements OnInit {
         id: this.editingProfileId || '',
         name: this.profileForm.value.name,
         email: this.profileForm.value.email,
+        rank: this.profileForm.value.rank,
+        image: this.profileForm.value.image,
       };
 
       if (this.selectedImage) {
@@ -71,8 +96,10 @@ export class ProfileComponent implements OnInit {
 
       if (this.editingProfileId) {
         // Update existing profile
+        this.$loading.next(true);
         this.profileService.updateProfile(profileData).subscribe(
           (updatedProfile) => {
+            this.$loading.next(false);
             // Update the profile in the list
             const index = this.profiles.findIndex(
               (p) => p.id === updatedProfile.id
@@ -80,20 +107,26 @@ export class ProfileComponent implements OnInit {
             if (index !== -1) {
               this.profiles[index] = updatedProfile;
             }
+            this.sortProfiles();
             this.resetForm();
           },
           (error) => {
+            this.$loading.next(false);
             console.error('Error updating profile:', error);
           }
         );
       } else {
         // Add new profile
+        this.$loading.next(true);
         this.profileService.createProfile(profileData).subscribe(
           (createdProfile) => {
+            this.$loading.next(false);
             this.profiles.push(createdProfile);
+            this.sortProfiles();
             this.resetForm();
           },
           (error) => {
+            this.$loading.next(false);
             console.error('Error creating profile:', error);
           }
         );
@@ -132,11 +165,11 @@ export class ProfileComponent implements OnInit {
 
   onEditProfile(profile: Profile) {
     this.editingProfileId = profile.id;
-
     // Populate the form with existing profile data
     this.profileForm.patchValue({
       name: profile.name,
       email: profile.email,
+      rank: profile.rank,
     });
 
     // If there's an image, set it
@@ -154,16 +187,20 @@ export class ProfileComponent implements OnInit {
 
   clearImage() {
     this.selectedImage = null;
-    this.profileForm.get('image')?.setValue('');
+    this.profileForm.get('image')?.setValue(null);
   }
 
   deleteProfile(id: string) {
+    this.$loading.next(true);
     this.profileService.deleteProfile(id).subscribe(
       () => {
+        this.$loading.next(false);
         // Remove the profile from the list
         this.profiles = this.profiles.filter((profile) => profile?.id !== id);
+        this.sortProfiles();
       },
       (error) => {
+        this.$loading.next(false);
         console.error('Error deleting profile:', error);
       }
     );

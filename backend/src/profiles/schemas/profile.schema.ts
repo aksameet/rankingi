@@ -21,6 +21,9 @@ export class Profile {
   @Prop({ required: false })
   email: string;
 
+  @Prop({ required: false })
+  rank: number;
+
   @Prop()
   image: string;
   // Add additional fields as needed

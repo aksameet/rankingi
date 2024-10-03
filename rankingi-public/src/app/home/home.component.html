@@ -1,0 +1,8 @@
+<!-- Display Existing Profiles -->
+<h2 class="title">Existing Profiles</h2>
+<div class="profile-wrapper">
+  <app-profile-card
+    *ngFor="let profile of profiles"
+    [profile]="profile"
+  ></app-profile-card>
+</div>

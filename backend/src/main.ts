@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import express from 'express';
+import * as express from 'express'; // Might be different for Firebase Functions, might cause errors
 import * as functions from 'firebase-functions';
 import { ValidationPipe } from '@nestjs/common';
 

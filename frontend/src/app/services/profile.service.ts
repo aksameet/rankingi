@@ -9,6 +9,7 @@ export interface Profile {
   email: string;
   rank: number;
   image?: string;
+  description?: string;
 }
 
 @Injectable({
@@ -16,7 +17,7 @@ export interface Profile {
 })
 export class ProfileService {
   // private apiUrl = 'https://api-jfyc2o6rla-uc.a.run.app/profiles';
-  private apiUrl = 'https://localhost:3000/profiles';
+  private apiUrl = 'http://localhost:3000/profiles';
 
   constructor(private http: HttpClient) {}
 

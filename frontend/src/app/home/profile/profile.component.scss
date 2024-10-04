@@ -1,48 +1,7 @@
-.form-card {
-  max-width: 600px;
-  margin: 0 auto 40px;
-}
-
-/* Form Fields Styling */
-.form-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.full-width {
-  width: 100%;
-}
-
-/* File Input Styling */
-.file-input {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.file-name {
-  font-style: italic;
-  color: #757575;
-}
-
-/* Image Preview Styling */
-.image-preview {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.image-preview img {
-  max-width: 150px;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
 /* Profile Grid Styling */
 .profile-wrapper {
   display: flex;
+  width: 100%;
   flex-wrap: wrap;
-  justify-content: center;
   margin: 20px 0;
 }

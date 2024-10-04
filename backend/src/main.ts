@@ -20,4 +20,14 @@ async function createNestServer() {
 
 createNestServer();
 
+// *** //
+// For local development (when running `npm run start`)
+if (process.env.NODE_ENV !== 'production') {
+  createNestServer().then(() => {
+    server.listen(3000, () => {
+      console.log('NestJS server is running locally on http://localhost:3000');
+    });
+  });
+}
+
 export const api = functions.https.onRequest(server);

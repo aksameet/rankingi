@@ -26,6 +26,9 @@ export class Profile {
 
   @Prop({ required: false })
   image!: string;
+
+  @Prop({ required: false })
+  description!: string;
   // Add additional fields as needed
 }
 

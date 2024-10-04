@@ -1,112 +1,13 @@
-<!-- Add New Profile Form -->
-<mat-card class="form-card">
-  <mat-card-header>
-    <mat-card-title class="mb-3">{{
-      editingProfileId ? "Edit Profile" : "Add Profile"
-    }}</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <form [formGroup]="profileForm" (ngSubmit)="addOrUpdateProfile()">
-      <div class="form-fields">
-        <!-- Name Field -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Name</mat-label>
-          <input matInput type="text" formControlName="name" />
-          <mat-error
-            *ngIf="
-              profileForm.get('name')?.invalid &&
-              profileForm.get('name')?.touched
-            "
-          >
-            Name is required
-          </mat-error>
-        </mat-form-field>
-
-        <!-- Email Field -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" />
-          <mat-error
-            *ngIf="
-              profileForm.get('email')?.invalid &&
-              profileForm.get('email')?.touched
-            "
-          >
-            <span *ngIf="profileForm.get('email')?.errors?.['required']"
-              >Email is required</span
-            >
-            <span *ngIf="profileForm.get('email')?.errors?.['email']"
-              >Enter a valid email</span
-            >
-          </mat-error>
-        </mat-form-field>
-
-        <!-- Rank Field -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Rank</mat-label>
-          <input matInput type="number" formControlName="rank" />
-          <mat-error
-            *ngIf="
-              profileForm.get('rank')?.invalid &&
-              profileForm.get('rank')?.touched
-            "
-          >
-            <span *ngIf="profileForm.get('rank')?.errors?.['required']"
-              >Rank is required</span
-            >
-          </mat-error>
-        </mat-form-field>
-
-        <!-- Image Upload -->
-        <div class="file-input">
-          <input
-            type="file"
-            #fileInput
-            (change)="onFileSelected($event)"
-            accept="image/*"
-            hidden
-          />
-          <button mat-raised-button type="button" (click)="fileInput.click()">
-            <mat-icon>upload</mat-icon>
-            Upload Profile Picture
-          </button>
-          <span class="file-name" *ngIf="selectedImage"> Image Selected </span>
-        </div>
-
-        <mat-spinner *ngIf="$loading | async"></mat-spinner>
-
-        <!-- Display Selected Image Preview -->
-        <div *ngIf="selectedImage" class="image-preview">
-          <img [src]="selectedImage" alt="Selected Image" />
-          <button mat-button color="warn" (click)="clearImage()">
-            Remove Image
-          </button>
-        </div>
-      </div>
-
-      <!-- Submit Button -->
-      <mat-card-actions align="end">
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          [disabled]="profileForm.invalid"
-          class="m-2"
-        >
-          {{ editingProfileId ? "Update Profile" : "Add Profile" }}
-        </button>
-        <button
-          mat-raised-button
-          color="warn"
-          type="button"
-          (click)="resetForm()"
-        >
-          Cancel
-        </button>
-      </mat-card-actions>
-    </form>
-  </mat-card-content>
-</mat-card>
+<app-profile-form
+  [profileForm]="profileForm"
+  [editingProfileId]="editingProfileId"
+  [selectedImage]="selectedImage"
+  [$loading]="$loading"
+  (submitProfile)="addOrUpdateProfile()"
+  (resetProfileForm)="resetForm()"
+  (imageSelected)="onFileSelected($event)"
+  (imageCleared)="clearImage()"
+></app-profile-form>
 
 <!-- Display Existing Profiles -->
 <h2 class="title">Existing Profiles</h2>

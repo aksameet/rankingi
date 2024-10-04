@@ -13,4 +13,7 @@ export class Profile {
 
   @Column()
   email!: string;
+
+  @Column()
+  description!: string;
 }

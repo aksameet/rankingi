@@ -12,6 +12,12 @@
     <mat-card-title>{{ profile.name }}</mat-card-title>
     <mat-card-subtitle>{{ profile.email }}</mat-card-subtitle>
   </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="profile.description">
+      Description:
+      <p>{{ profile.description }}</p>
+    </div>
+  </mat-card-content>
   <mat-card-actions align="end">
     <button mat-icon-button color="warn" (click)="onDelete()">
       <mat-icon>delete</mat-icon>

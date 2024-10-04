@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 // Add more imports as needed
 
 const materialModules = [
@@ -14,6 +15,7 @@ const materialModules = [
   MatButtonModule,
   MatIconModule,
   MatCardModule,
+  MatProgressSpinnerModule,
   // Add more modules here
 ];
 

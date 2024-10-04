@@ -11,7 +11,7 @@ import imageCompression from 'browser-image-compression';
 import { MaterialModule } from '../../shared/modules/material.module';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { BehaviorSubject } from 'rxjs';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ProfileFormComponent } from './profile-form/profile-form.component';
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +21,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ReactiveFormsModule,
     MaterialModule,
     ProfileCardComponent,
-    MatProgressSpinnerModule,
+    ProfileFormComponent,
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
@@ -40,6 +40,7 @@ export class ProfileComponent implements OnInit {
       email: new FormControl('', [Validators.required]),
       rank: new FormControl(0),
       image: new FormControl(null),
+      description: new FormControl(''),
     });
   }
 
@@ -83,7 +84,10 @@ export class ProfileComponent implements OnInit {
         email: this.profileForm.value.email,
         rank: this.profileForm.value.rank,
         image: this.profileForm.value.image,
+        description: this.profileForm.value.description,
       };
+
+      console.log('PD =>', profileData);
 
       if (this.selectedImage) {
         // Remove the data URL prefix
@@ -137,30 +141,27 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      const options = {
-        maxSizeMB: 0.0025,
-        maxWidthOrHeight: 500,
-        useWebWorker: true,
-      };
-      this.$loading.next(true);
-      imageCompression(file, options)
-        .then((compressedFile) => {
-          const reader = new FileReader();
-          reader.onload = () => {
-            this.selectedImage = reader.result as string;
-            this.profileForm.get('image')?.setValue(this.selectedImage);
-            this.$loading.next(false);
-          };
-          reader.readAsDataURL(compressedFile);
-        })
-        .catch((error) => {
-          console.error('Error compressing image:', error);
+  onFileSelected(file: File) {
+    const options = {
+      maxSizeMB: 0.0025,
+      maxWidthOrHeight: 500,
+      useWebWorker: true,
+    };
+    this.$loading.next(true);
+    imageCompression(file, options)
+      .then((compressedFile) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.selectedImage = reader.result as string;
+          this.profileForm.get('image')?.setValue(this.selectedImage);
           this.$loading.next(false);
-        });
-    }
+        };
+        reader.readAsDataURL(compressedFile);
+      })
+      .catch((error) => {
+        console.error('Error compressing image:', error);
+        this.$loading.next(false);
+      });
   }
 
   onEditProfile(profile: Profile) {
@@ -170,6 +171,7 @@ export class ProfileComponent implements OnInit {
       name: profile.name,
       email: profile.email,
       rank: profile.rank,
+      description: profile.description,
     });
 
     // If there's an image, set it

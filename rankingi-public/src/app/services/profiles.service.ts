@@ -15,7 +15,7 @@ export interface Profile {
   providedIn: 'root',
 })
 export class ProfileService {
-  private apiUrl = 'http://localhost:3000/profiles';
+  private apiUrl = 'https://api-jfyc2o6rla-uc.a.run.app/profiles';
 
   constructor(private http: HttpClient) {}
 

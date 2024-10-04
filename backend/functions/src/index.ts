@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import express from 'express';
-import * as functions from 'firebase-functions';
+import { onRequest } from 'firebase-functions/v2/https'; // Use the 2nd gen https trigger
 import { ValidationPipe } from '@nestjs/common';
 
 const server = express();
@@ -20,4 +20,5 @@ async function createNestServer() {
 
 createNestServer();
 
-export const api = functions.https.onRequest(server);
+// 2nd gen function trigger
+export const api = onRequest({ cors: true }, server);

@@ -12,6 +12,7 @@ import { MaterialModule } from '../../shared/modules/material.module';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { BehaviorSubject } from 'rxjs';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
+import { ExcelUploadComponent } from '../../excel-upload/excel-upload.component';
 
 @Component({
   selector: 'app-profile',
@@ -22,6 +23,7 @@ import { ProfileFormComponent } from './profile-form/profile-form.component';
     MaterialModule,
     ProfileCardComponent,
     ProfileFormComponent,
+    ExcelUploadComponent,
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
@@ -60,6 +62,7 @@ export class ProfileComponent implements OnInit {
       },
       (error) => {
         this.$loading.next(false);
+        this.profiles = [];
         console.error('Error loading profiles:', error);
       }
     );

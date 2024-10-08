@@ -39,4 +39,9 @@ export class ProfileService {
     const apiUrl = `${this.apiBaseUrl}/${type}/${id}`; // Dynamic URL based on type
     return this.http.delete<void>(apiUrl);
   }
+
+  createProfiles(profiles: Profile[], type: string): Observable<Profile[]> {
+    const apiUrl = `${this.apiBaseUrl}/${type}/bulk`;
+    return this.http.post<Profile[]>(apiUrl, profiles);
+  }
 }

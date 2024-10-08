@@ -1,0 +1,34 @@
+<div class="excel-upload-container">
+  <h2>Upload Excel File</h2>
+
+  <!-- Hidden file input -->
+  <input
+    type="file"
+    accept=".xlsx, .xls"
+    (change)="onFileChange($event)"
+    #fileInput
+    hidden
+  />
+
+  <!-- Button to trigger file input -->
+  <button type="button" (click)="triggerFileInput()" class="upload-button">
+    Choose Excel File
+  </button>
+
+  <!-- Loading and error messages -->
+  <div *ngIf="isLoading" class="status-message">Processing file...</div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <!-- Save to Backend Button -->
+  <button
+    type="button"
+    (click)="saveToBackend()"
+    class="save-button"
+    [disabled]="isSaving || jsonData.length === 0"
+  >
+    {{ isSaving ? "Saving..." : "Save to Backend" }}
+  </button>
+
+  <!-- Save Status Message -->
+  <div *ngIf="saveMessage" class="save-message">{{ saveMessage }}</div>
+</div>

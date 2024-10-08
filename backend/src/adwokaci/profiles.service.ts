@@ -6,7 +6,7 @@ import { Model } from 'mongoose';
 @Injectable()
 export class ProfilesService {
   constructor(
-    @InjectModel('Default') private profileModel: Model<ProfileDocument>,
+    @InjectModel('Adwokaci') private profileModel: Model<ProfileDocument>,
   ) {}
 
   async create(profileData: Partial<Profile>): Promise<Profile> {

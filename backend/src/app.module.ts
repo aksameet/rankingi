@@ -3,9 +3,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ProfilesModule } from './profiles/profiles.module';
 import * as dotenv from 'dotenv';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AdwokaciModule } from './adwokaci/profiles.module';
+import { RadcowieModule } from './radcowie/profiles.module';
 
 dotenv.config();
-console.log('MongoDB URI:', process.env.MONGODB_URI);
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,6 +20,8 @@ console.log('MongoDB URI:', process.env.MONGODB_URI);
       inject: [ConfigService],
     }),
     ProfilesModule,
+    AdwokaciModule,
+    RadcowieModule,
   ],
 })
 export class AppModule {}

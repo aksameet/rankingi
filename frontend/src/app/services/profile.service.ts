@@ -16,24 +16,27 @@ export interface Profile {
   providedIn: 'root',
 })
 export class ProfileService {
-  // private apiUrl = 'https://api-jfyc2o6rla-uc.a.run.app/profiles';
-  private apiUrl = 'http://localhost:3000/profiles';
+  private apiBaseUrl = 'http://localhost:3000'; // Base URL
 
   constructor(private http: HttpClient) {}
 
-  getProfiles(): Observable<Profile[]> {
-    return this.http.get<Profile[]>(this.apiUrl);
+  getProfiles(type: string): Observable<Profile[]> {
+    const apiUrl = `${this.apiBaseUrl}/${type}`; // Dynamic URL based on type
+    return this.http.get<Profile[]>(apiUrl);
   }
 
-  createProfile(profile: Profile): Observable<Profile> {
-    return this.http.post<Profile>(this.apiUrl, profile);
+  createProfile(profile: Profile, type: string): Observable<Profile> {
+    const apiUrl = `${this.apiBaseUrl}/${type}`; // Dynamic URL based on type
+    return this.http.post<Profile>(apiUrl, profile);
   }
 
-  updateProfile(profile: Profile): Observable<Profile> {
-    return this.http.put<Profile>(`${this.apiUrl}/${profile.id}`, profile);
+  updateProfile(profile: Profile, type: string): Observable<Profile> {
+    const apiUrl = `${this.apiBaseUrl}/${type}/${profile.id}`; // Dynamic URL based on type
+    return this.http.put<Profile>(apiUrl, profile);
   }
 
-  deleteProfile(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  deleteProfile(id: string, type: string): Observable<void> {
+    const apiUrl = `${this.apiBaseUrl}/${type}/${id}`; // Dynamic URL based on type
+    return this.http.delete<void>(apiUrl);
   }
 }

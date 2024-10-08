@@ -3,6 +3,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { MaterialModule } from '../../../shared/modules/material.module';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-profile-form',
@@ -12,6 +13,8 @@ import { MaterialModule } from '../../../shared/modules/material.module';
   styleUrls: ['./profile-form.component.scss'],
 })
 export class ProfileFormComponent implements OnInit {
+  selectedType: string = 'profiles';
+
   @Input() profileForm!: FormGroup;
   @Input() editingProfileId!: string | null;
   @Input() selectedImage!: string | null;
@@ -21,6 +24,7 @@ export class ProfileFormComponent implements OnInit {
   @Output() resetProfileForm = new EventEmitter<void>();
   @Output() imageSelected = new EventEmitter<File>();
   @Output() imageCleared = new EventEmitter<void>();
+  @Output() typeChanged = new EventEmitter<string>();
 
   ngOnInit() {}
 
@@ -43,5 +47,9 @@ export class ProfileFormComponent implements OnInit {
 
   resetForm() {
     this.resetProfileForm.emit();
+  }
+
+  onTypeChanged(event: MatSelectChange) {
+    this.typeChanged.emit(event.value);
   }
 }

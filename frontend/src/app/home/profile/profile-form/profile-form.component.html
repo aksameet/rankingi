@@ -5,6 +5,18 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content class="input-form-content">
+    <mat-form-field appearance="outline">
+      <mat-label>Type</mat-label>
+      <mat-select
+        [(value)]="selectedType"
+        (selectionChange)="onTypeChanged($event)"
+      >
+        <mat-option value="profiles">Profiles</mat-option>
+        <mat-option value="adwokaci">Adowkaci</mat-option>
+        <mat-option value="radcowie">Radcowie</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
       <div class="form-fields">
         <!-- Name Field -->

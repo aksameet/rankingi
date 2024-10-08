@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 export type ProfileDocument = Profile & Document;
 
 @Schema({
-  collection: 'profiles',
+  collection: 'radcowie',
   toJSON: {
     virtuals: true,
     versionKey: false,

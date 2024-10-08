@@ -32,6 +32,7 @@ export class ProfileComponent implements OnInit {
   profileForm: FormGroup;
   selectedImage: string | null = null;
   editingProfileId: string | null = null;
+  selectedType: string = 'profiles'; // Default type
 
   constructor(private profileService: ProfileService) {
     // Initialize the form group with controls and validators
@@ -45,16 +46,26 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadProfiles();
+    this.loadProfiles(); // Load profiles initially with default type
   }
 
+  // Load profiles based on the selected type
   loadProfiles() {
-    this.profileService.getProfiles().subscribe((data) => {
-      this.profiles = data;
-      this.sortProfiles();
-    });
+    this.$loading.next(true);
+    this.profileService.getProfiles(this.selectedType).subscribe(
+      (data) => {
+        this.$loading.next(false);
+        this.profiles = data;
+        this.sortProfiles();
+      },
+      (error) => {
+        this.$loading.next(false);
+        console.error('Error loading profiles:', error);
+      }
+    );
   }
 
+  // Handle sorting logic
   sortProfiles() {
     this.profiles.sort((a, b) => {
       const rankA = a.rank;
@@ -76,6 +87,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  // Handle profile addition or update
   addOrUpdateProfile() {
     if (this.profileForm.valid) {
       const profileData: Profile = {
@@ -87,8 +99,6 @@ export class ProfileComponent implements OnInit {
         description: this.profileForm.value.description,
       };
 
-      console.log('PD =>', profileData);
-
       if (this.selectedImage) {
         // Remove the data URL prefix
         const base64Data = this.selectedImage.replace(
@@ -98,42 +108,46 @@ export class ProfileComponent implements OnInit {
         profileData.image = base64Data;
       }
 
+      this.$loading.next(true);
+
       if (this.editingProfileId) {
         // Update existing profile
-        this.$loading.next(true);
-        this.profileService.updateProfile(profileData).subscribe(
-          (updatedProfile) => {
-            this.$loading.next(false);
-            // Update the profile in the list
-            const index = this.profiles.findIndex(
-              (p) => p.id === updatedProfile.id
-            );
-            if (index !== -1) {
-              this.profiles[index] = updatedProfile;
+        this.profileService
+          .updateProfile(profileData, this.selectedType)
+          .subscribe(
+            (updatedProfile) => {
+              this.$loading.next(false);
+              // Update the profile in the list
+              const index = this.profiles.findIndex(
+                (p) => p.id === updatedProfile.id
+              );
+              if (index !== -1) {
+                this.profiles[index] = updatedProfile;
+              }
+              this.sortProfiles();
+              this.resetForm();
+            },
+            (error) => {
+              this.$loading.next(false);
+              console.error('Error updating profile:', error);
             }
-            this.sortProfiles();
-            this.resetForm();
-          },
-          (error) => {
-            this.$loading.next(false);
-            console.error('Error updating profile:', error);
-          }
-        );
+          );
       } else {
         // Add new profile
-        this.$loading.next(true);
-        this.profileService.createProfile(profileData).subscribe(
-          (createdProfile) => {
-            this.$loading.next(false);
-            this.profiles.push(createdProfile);
-            this.sortProfiles();
-            this.resetForm();
-          },
-          (error) => {
-            this.$loading.next(false);
-            console.error('Error creating profile:', error);
-          }
-        );
+        this.profileService
+          .createProfile(profileData, this.selectedType)
+          .subscribe(
+            (createdProfile) => {
+              this.$loading.next(false);
+              this.profiles.push(createdProfile);
+              this.sortProfiles();
+              this.resetForm();
+            },
+            (error) => {
+              this.$loading.next(false);
+              console.error('Error creating profile:', error);
+            }
+          );
       }
     } else {
       // Mark all controls as touched to show validation errors
@@ -141,6 +155,7 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  // Handle file selection and compression
   onFileSelected(file: File) {
     const options = {
       maxSizeMB: 0.0025,
@@ -164,9 +179,9 @@ export class ProfileComponent implements OnInit {
       });
   }
 
+  // Edit profile and populate form with existing data
   onEditProfile(profile: Profile) {
     this.editingProfileId = profile.id;
-    // Populate the form with existing profile data
     this.profileForm.patchValue({
       name: profile.name,
       email: profile.email,
@@ -174,30 +189,31 @@ export class ProfileComponent implements OnInit {
       description: profile.description,
     });
 
-    // If there's an image, set it
     if (profile.image) {
       this.selectedImage = 'data:image/jpeg;base64,' + profile.image;
       this.profileForm.get('image')?.setValue(this.selectedImage);
     }
   }
 
+  // Reset form after profile submission or cancellation
   resetForm() {
     this.profileForm.reset();
     this.selectedImage = null;
     this.editingProfileId = null;
   }
 
+  // Clear selected image
   clearImage() {
     this.selectedImage = null;
     this.profileForm.get('image')?.setValue(null);
   }
 
+  // Delete profile
   deleteProfile(id: string) {
     this.$loading.next(true);
-    this.profileService.deleteProfile(id).subscribe(
+    this.profileService.deleteProfile(id, this.selectedType).subscribe(
       () => {
         this.$loading.next(false);
-        // Remove the profile from the list
         this.profiles = this.profiles.filter((profile) => profile?.id !== id);
         this.sortProfiles();
       },
@@ -213,5 +229,12 @@ export class ProfileComponent implements OnInit {
       this.resetForm();
     }
     this.deleteProfile(id);
+  }
+
+  // Triggered when profile type changes in the dropdown
+  onTypeChanged(event: string) {
+    this.profiles = []; // Clear the current list of profiles
+    this.selectedType = event;
+    this.loadProfiles(); // Re-fetch profiles based on selected type
   }
 }

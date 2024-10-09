@@ -1,7 +1,12 @@
+// src/profiles/profiles.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Profile, ProfileDocument } from './schemas/profile.schema';
 import { Model } from 'mongoose';
+import {
+  BulkCreateProfileDto,
+  CreateProfileDto,
+} from './dto/bulk-create-profile.dto';
 
 @Injectable()
 export class ProfilesService {
@@ -9,9 +14,27 @@ export class ProfilesService {
     @InjectModel('Default') private profileModel: Model<ProfileDocument>,
   ) {}
 
-  async create(profileData: Partial<Profile>): Promise<Profile> {
+  async create(profileData: CreateProfileDto): Promise<Profile> {
     const createdProfile = new this.profileModel(profileData);
     return createdProfile.save();
+  }
+
+  async createBulkProfiles(bulkData: BulkCreateProfileDto): Promise<Profile[]> {
+    const bulkOps = bulkData.profiles.map((profile) => ({
+      updateOne: {
+        filter: { email: profile.email }, // Use a unique field like 'email'
+        update: { $set: profile },
+        upsert: true,
+      },
+    }));
+
+    await this.profileModel.bulkWrite(bulkOps, { ordered: false });
+
+    // Retrieve and return the upserted profiles
+    const emails = bulkData.profiles.map((profile) => profile.email);
+    return this.profileModel.find({ email: { $in: emails } }).exec();
+
+    // return this.profileModel.insertMany(bulkData.profiles);
   }
 
   async findAll(): Promise<Profile[]> {
@@ -41,5 +64,10 @@ export class ProfilesService {
     if (!deletedProfile) {
       throw new NotFoundException(`Profile with ID "${id}" not found`);
     }
+  }
+
+  async deleteAll(): Promise<{ deletedCount?: number }> {
+    const result = await this.profileModel.deleteMany({});
+    return { deletedCount: result.deletedCount };
   }
 }

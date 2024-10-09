@@ -20,7 +20,7 @@
     <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
       <div class="form-fields">
         <!-- Name Field -->
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline">
           <mat-label>Name</mat-label>
           <input matInput type="text" formControlName="name" />
           <mat-error
@@ -34,42 +34,15 @@
         </mat-form-field>
 
         <!-- Email Field -->
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input matInput type="email" formControlName="email" />
-          <mat-error
-            *ngIf="
-              profileForm.get('email')?.invalid &&
-              profileForm.get('email')?.touched
-            "
-          >
-            <span *ngIf="profileForm.get('email')?.errors?.['required']"
-              >Email is required</span
-            >
-            <span *ngIf="profileForm.get('email')?.errors?.['email']"
-              >Enter a valid email</span
-            >
-          </mat-error>
         </mat-form-field>
 
         <!-- Rank Field -->
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline">
           <mat-label>Rank</mat-label>
           <input matInput type="number" formControlName="rank" />
-          <mat-error
-            *ngIf="
-              profileForm.get('rank')?.invalid &&
-              profileForm.get('rank')?.touched
-            "
-          >
-            Rank is required
-          </mat-error>
-        </mat-form-field>
-
-        <!-- Description Field -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Description</mat-label>
-          <input matInput type="string" formControlName="description" />
         </mat-form-field>
 
         <!-- Image Upload -->

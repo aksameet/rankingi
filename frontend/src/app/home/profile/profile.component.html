@@ -1,4 +1,26 @@
-<app-excel-upload> </app-excel-upload>
+<app-excel-upload (bulkUploadComplete)="onBulkUploadComplete()">
+</app-excel-upload>
+
+<!-- Delete All Button -->
+
+<div class="action-buttons">
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="deleteAllProfiles()"
+    [disabled]="profiles.length === 0 || ($loading | async)"
+  >
+    Delete All
+  </button>
+  <button mat-raised-button color="primary" (click)="downloadProfilesAsExcel()">
+    Download Profiles as Excel
+  </button>
+  <!-- Add other buttons like Add Profile, Delete All, etc. -->
+</div>
+
+<!-- Save Message -->
+<div *ngIf="saveMessage" class="save-message">{{ saveMessage }}</div>
+
 <app-profile-form
   [profileForm]="profileForm"
   [editingProfileId]="editingProfileId"

@@ -3,13 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 
 export interface Profile {
-  id: string;
+  id?: string;
   _id?: string; // Include _id if you want to handle MongoDB document IDs
   name: string;
-  email: string;
-  rank: number;
+  address?: string;
+  telephone?: string;
+  email?: string;
+  rank?: number;
   image?: string;
   description?: string;
+  specjalisation?: string;
+  geolocation?: string;
+  stars?: number;
 }
 
 @Injectable({
@@ -40,8 +45,18 @@ export class ProfileService {
     return this.http.delete<void>(apiUrl);
   }
 
-  createProfiles(profiles: Profile[], type: string): Observable<Profile[]> {
+  deleteAll(
+    type: string
+  ): Observable<{ message: string; deletedCount?: number }> {
+    const apiUrl = `${this.apiBaseUrl}/${type}`;
+    return this.http.delete<{ message: string; deletedCount?: number }>(apiUrl);
+  }
+
+  createProfiles(
+    payload: { profiles: Profile[] },
+    type: string
+  ): Observable<Profile[]> {
     const apiUrl = `${this.apiBaseUrl}/${type}/bulk`;
-    return this.http.post<Profile[]>(apiUrl, profiles);
+    return this.http.post<Profile[]>(apiUrl, payload);
   }
 }

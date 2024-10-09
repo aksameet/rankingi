@@ -1,3 +1,4 @@
+// src/profiles/schemas/profile.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
@@ -9,8 +10,9 @@ export type ProfileDocument = Profile & Document;
     virtuals: true,
     versionKey: false,
     transform: (doc, ret) => {
-      ret.id = ret._id; // Map _id to id
-      delete ret._id; // Remove _id
+      ret.id = ret._id;
+      delete ret._id;
+      return ret; // Ensure the transformed object is returned
     },
   },
 })
@@ -18,19 +20,32 @@ export class Profile {
   @Prop({ required: true })
   name!: string;
 
-  @Prop({ required: false })
-  email!: string;
+  @Prop()
+  address?: string;
 
-  @Prop({ required: false })
-  rank!: number;
+  @Prop()
+  telephone?: string;
 
-  @Prop({ required: false })
-  image!: string;
+  @Prop({ required: true, unique: true })
+  email?: string;
 
-  @Prop({ required: false })
-  description!: string;
+  @Prop()
+  rank?: number;
 
-  // Add additional fields as needed
+  @Prop()
+  image?: string;
+
+  @Prop()
+  description?: string;
+
+  @Prop()
+  specjalisation?: string;
+
+  @Prop()
+  geolocation?: string;
+
+  @Prop()
+  stars?: number;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);

@@ -14,7 +14,14 @@ export class CreateProfileDto {
 
   @IsString()
   @IsOptional()
-  email?: string;
+  address?: string;
+
+  @IsString()
+  @IsOptional()
+  telephone?: string;
+
+  @IsString()
+  email!: string;
 
   @IsNumber()
   @IsOptional()
@@ -27,6 +34,18 @@ export class CreateProfileDto {
   @IsString()
   @IsOptional()
   description?: string;
+
+  @IsString()
+  @IsOptional()
+  specjalisation?: string;
+
+  @IsString()
+  @IsOptional()
+  geolocation?: string;
+
+  @IsNumber()
+  @IsOptional()
+  stars?: number;
 }
 
 export class BulkCreateProfileDto {

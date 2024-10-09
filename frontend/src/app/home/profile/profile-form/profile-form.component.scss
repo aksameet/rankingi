@@ -6,7 +6,13 @@
 
 .form-fields {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  .mat-mdc-form-field {
+    width: 45%;
+    &:last-of-type {
+      width: 10%;
+    }
+  }
 }
 
 .full-width {

@@ -13,6 +13,8 @@ import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { BehaviorSubject } from 'rxjs';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
 import { ExcelUploadComponent } from '../../excel-upload/excel-upload.component';
+import * as ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-profile',
@@ -35,15 +37,15 @@ export class ProfileComponent implements OnInit {
   selectedImage: string | null = null;
   editingProfileId: string | null = null;
   selectedType: string = 'profiles'; // Default type
+  saveMessage: string = '';
 
   constructor(private profileService: ProfileService) {
     // Initialize the form group with controls and validators
     this.profileForm = new FormGroup({
       name: new FormControl('', Validators.required),
-      email: new FormControl('', [Validators.required]),
+      email: new FormControl('', Validators.required),
       rank: new FormControl(0),
       image: new FormControl(null),
-      description: new FormControl(''),
     });
   }
 
@@ -184,7 +186,7 @@ export class ProfileComponent implements OnInit {
 
   // Edit profile and populate form with existing data
   onEditProfile(profile: Profile) {
-    this.editingProfileId = profile.id;
+    this.editingProfileId = profile.id || null;
     this.profileForm.patchValue({
       name: profile.name,
       email: profile.email,
@@ -239,5 +241,83 @@ export class ProfileComponent implements OnInit {
     this.profiles = []; // Clear the current list of profiles
     this.selectedType = event;
     this.loadProfiles(); // Re-fetch profiles based on selected type
+  }
+
+  onBulkUploadComplete(): void {
+    this.resetForm();
+    this.loadProfiles();
+  }
+
+  deleteAllProfiles(): void {
+    if (confirm('Are you sure you want to delete all profiles?')) {
+      this.$loading.next(true);
+      this.profileService.deleteAll(this.selectedType).subscribe({
+        next: () => {
+          this.$loading.next(false);
+          this.profiles = [];
+          this.saveMessage = 'All profiles have been deleted successfully.';
+        },
+        error: (error: any) => {
+          this.$loading.next(false);
+          console.error('Error deleting all profiles:', error);
+          this.saveMessage = 'Error deleting all profiles.';
+        },
+      });
+    }
+  }
+
+  downloadProfilesAsExcel() {
+    if (this.profiles.length === 0) {
+      this.saveMessage = 'No profiles available to download.';
+      return;
+    }
+
+    // Create a new workbook and add a worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Profiles');
+
+    // Define worksheet columns
+    worksheet.columns = [
+      { header: 'name', key: 'name' },
+      { header: 'address', key: 'address' },
+      { header: 'telephone', key: 'telephone' },
+      { header: 'email', key: 'email' },
+      { header: 'rank', key: 'rank' },
+      { header: 'description', key: 'description' },
+      { header: 'specjalisation', key: 'specjalisation' },
+      { header: 'geolocation', key: 'geolocation' },
+      { header: 'stars', key: 'stars' },
+    ];
+
+    // Add rows to the worksheet
+    const data = this.profiles.map((profile) => ({
+      name: profile.name,
+      address: profile.address || '',
+      telephone: profile.telephone || '',
+      email: profile.email || '',
+      rank: profile.rank !== undefined ? Number(profile.rank) : '',
+      description: profile.description || '',
+      specjalisation: profile.specjalisation || '',
+      geolocation: profile.geolocation || '',
+      stars: profile.stars !== undefined ? Number(profile.stars) : '',
+    }));
+
+    worksheet.addRows(data);
+
+    // Styling (Optional)
+    worksheet.getRow(1).font = { bold: true };
+
+    // Generate buffer
+    workbook.xlsx
+      .writeBuffer()
+      .then((buffer) => {
+        const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        saveAs(blob, `profiles_${new Date().toISOString()}.xlsx`);
+        this.saveMessage = 'Profiles have been downloaded successfully.';
+      })
+      .catch((error) => {
+        console.error('Error generating Excel file:', error);
+        this.saveMessage = 'Error downloading profiles.';
+      });
   }
 }

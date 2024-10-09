@@ -1,3 +1,4 @@
+// src/profiles/profiles.controller.ts
 import {
   Controller,
   Get,
@@ -9,7 +10,10 @@ import {
 } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { Profile } from './schemas/profile.schema';
-import { CreateProfileDto } from './dto/create-profile.dto';
+import {
+  CreateProfileDto,
+  BulkCreateProfileDto,
+} from './dto/bulk-create-profile.dto';
 
 @Controller('profiles')
 export class ProfilesController {
@@ -18,6 +22,13 @@ export class ProfilesController {
   @Post()
   async create(@Body() createProfileDto: CreateProfileDto): Promise<Profile> {
     return this.profilesService.create(createProfileDto);
+  }
+
+  @Post('bulk')
+  async createBulk(
+    @Body() bulkCreateProfileDto: BulkCreateProfileDto,
+  ): Promise<Profile[]> {
+    return this.profilesService.createBulkProfiles(bulkCreateProfileDto);
   }
 
   @Get()
@@ -41,5 +52,14 @@ export class ProfilesController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<any> {
     return this.profilesService.remove(id);
+  }
+
+  @Delete()
+  async deleteAll(): Promise<{ message: string; deletedCount?: number }> {
+    const result = await this.profilesService.deleteAll();
+    return {
+      message: 'All profiles have been deleted successfully.',
+      deletedCount: result.deletedCount,
+    };
   }
 }

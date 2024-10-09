@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import * as ExcelJS from 'exceljs';
 import { ProfileService, Profile } from '../services/profile.service';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   standalone: true,
@@ -13,6 +14,7 @@ import { ProfileService, Profile } from '../services/profile.service';
 })
 export class ExcelUploadComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @Output() bulkUploadComplete = new EventEmitter<void>();
 
   jsonData: any[] = [];
   errorMessage: string = '';
@@ -119,18 +121,24 @@ export class ExcelUploadComponent {
     this.saveMessage = '';
 
     const profiles: Profile[] = this.jsonData.map((item) => ({
-      id: item.id || '',
       name: item.name,
+      address: item.address,
+      telephone: item.telephone,
       email: item.email,
       rank: Number(item.rank),
-      image: item.image,
       description: item.description,
+      specjalisation: item.specjalisation,
+      geolocation: item.geolocation,
+      stars: Number(item.stars),
     }));
 
-    this.profileService.createProfiles(profiles, 'profiles').subscribe({
+    const payload = { profiles: profiles };
+
+    this.profileService.createProfiles(payload, 'profiles').subscribe({
       next: (response) => {
         console.log('Data saved successfully:', response);
         this.saveMessage = 'Data saved successfully!';
+        this.bulkUploadComplete.emit();
       },
       error: (error) => {
         console.error('Error saving data:', error);

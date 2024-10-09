@@ -4,13 +4,14 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import * as ExcelJS from 'exceljs';
 import { ProfileService, Profile } from '../services/profile.service';
 import { Output, EventEmitter } from '@angular/core';
+import { MaterialModule } from '../shared/modules/material.module';
 
 @Component({
   standalone: true,
   selector: 'app-excel-upload',
   templateUrl: './excel-upload.component.html',
   styleUrls: ['./excel-upload.component.scss'],
-  imports: [CommonModule],
+  imports: [CommonModule, MaterialModule],
 })
 export class ExcelUploadComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
@@ -24,12 +25,10 @@ export class ExcelUploadComponent {
 
   constructor(private profileService: ProfileService) {}
 
-  // Programmatically trigger the file input click
   triggerFileInput(): void {
     this.fileInput.nativeElement.click();
   }
 
-  // Handles file input change event
   onFileChange(event: any): void {
     const file: File = event.target.files[0];
 
@@ -38,7 +37,6 @@ export class ExcelUploadComponent {
     this.saveMessage = '';
 
     if (file) {
-      // Validate file type
       const validTypes = [
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'application/vnd.ms-excel',
@@ -80,25 +78,22 @@ export class ExcelUploadComponent {
     }
   }
 
-  // Converts worksheet data to JSON and filters out objects missing the 'name' key or with empty 'name'
   convertSheetToJSON(worksheet: ExcelJS.Worksheet): any[] {
     const jsonData: any[] = [];
     const headers: string[] = [];
 
     worksheet.eachRow((row, rowNumber) => {
       if (rowNumber === 1) {
-        // First row - headers
         row.eachCell((cell, colNumber) => {
-          headers[colNumber - 1] = cell.text.trim();
+          headers[colNumber - 1] = cell.text.trim().toLowerCase();
         });
       } else {
         const rowData: any = {};
         row.eachCell((cell, colNumber) => {
-          const header = headers[colNumber - 1] || `Column ${colNumber}`;
+          const header = headers[colNumber - 1] || `column${colNumber}`;
           rowData[header] = cell.text.trim();
         });
 
-        // Check if 'name' key exists and is not empty
         if (rowData['name'] && rowData['name'].trim() !== '') {
           jsonData.push(rowData);
         } else {
@@ -110,7 +105,6 @@ export class ExcelUploadComponent {
     return jsonData;
   }
 
-  // Save data to backend
   saveToBackend(): void {
     if (this.jsonData.length === 0) {
       this.saveMessage = 'No data to save.';
@@ -119,6 +113,7 @@ export class ExcelUploadComponent {
 
     this.isSaving = true;
     this.saveMessage = '';
+    this.errorMessage = '';
 
     const profiles: Profile[] = this.jsonData.map((item) => ({
       name: item.name,
@@ -127,7 +122,7 @@ export class ExcelUploadComponent {
       email: item.email,
       rank: Number(item.rank),
       description: item.description,
-      specjalisation: item.specjalisation,
+      specialization: item.specialization,
       geolocation: item.geolocation,
       stars: Number(item.stars),
     }));
@@ -138,11 +133,18 @@ export class ExcelUploadComponent {
       next: (response) => {
         console.log('Data saved successfully:', response);
         this.saveMessage = 'Data saved successfully!';
+        this.jsonData = [];
         this.bulkUploadComplete.emit();
+        setTimeout(() => {
+          this.saveMessage = '';
+        }, 3000);
       },
       error: (error) => {
         console.error('Error saving data:', error);
         this.saveMessage = 'Error saving data.';
+        setTimeout(() => {
+          this.saveMessage = '';
+        }, 3000);
       },
       complete: () => {
         this.isSaving = false;

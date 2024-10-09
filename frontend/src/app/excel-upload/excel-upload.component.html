@@ -1,34 +1,60 @@
-<div class="excel-upload-container">
-  <h2>Upload Excel File</h2>
+<!-- excel-upload.component.html -->
+<mat-card class="excel-upload-container">
+  <mat-card-content>
+    <div class="upload-section">
+      <mat-icon
+        *ngIf="jsonData.length"
+        aria-label="File Saved"
+        class="save-icon"
+        >save</mat-icon
+      >
 
-  <!-- Hidden file input -->
-  <input
-    type="file"
-    accept=".xlsx, .xls"
-    (change)="onFileChange($event)"
-    #fileInput
-    hidden
-  />
+      <input
+        type="file"
+        accept=".xlsx, .xls"
+        (change)="onFileChange($event)"
+        #fileInput
+        hidden
+      />
 
-  <!-- Button to trigger file input -->
-  <button type="button" (click)="triggerFileInput()" class="upload-button">
-    Choose Excel File
-  </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="triggerFileInput()"
+        class="upload-button"
+      >
+        Upload Excel File
+      </button>
+    </div>
 
-  <!-- Loading and error messages -->
-  <div *ngIf="isLoading" class="status-message">Processing file...</div>
-  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <div class="messages">
+      <div *ngIf="isLoading" class="status-message">
+        <mat-progress-spinner
+          diameter="20"
+          mode="indeterminate"
+        ></mat-progress-spinner>
+        <span>Processing file...</span>
+      </div>
+      <div *ngIf="errorMessage" class="error-message">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+      <div *ngIf="saveMessage" class="save-message">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ saveMessage }}</span>
+      </div>
+    </div>
 
-  <!-- Save to Backend Button -->
-  <button
-    type="button"
-    (click)="saveToBackend()"
-    class="save-button"
-    [disabled]="isSaving || jsonData.length === 0"
-  >
-    {{ isSaving ? "Saving..." : "Save to Backend" }}
-  </button>
-
-  <!-- Save Status Message -->
-  <div *ngIf="saveMessage" class="save-message">{{ saveMessage }}</div>
-</div>
+    <div class="save-section">
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="saveToBackend()"
+        [disabled]="isSaving || jsonData.length === 0"
+        class="save-button"
+      >
+        {{ isSaving ? "Saving..." : "Save to Backend" }}
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>

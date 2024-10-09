@@ -37,7 +37,7 @@ export class CreateProfileDto {
 
   @IsString()
   @IsOptional()
-  specjalisation?: string;
+  specialization?: string;
 
   @IsString()
   @IsOptional()

@@ -12,7 +12,7 @@ export interface Profile {
   rank?: number;
   image?: string;
   description?: string;
-  specjalisation?: string;
+  specialization?: string;
   geolocation?: string;
   stars?: number;
 }

@@ -39,7 +39,7 @@ export class Profile {
   description?: string;
 
   @Prop()
-  specjalisation?: string;
+  specialization?: string;
 
   @Prop()
   geolocation?: string;

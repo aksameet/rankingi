@@ -13,8 +13,7 @@ import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { BehaviorSubject } from 'rxjs';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
 import { ExcelUploadComponent } from '../../excel-upload/excel-upload.component';
-import * as ExcelJS from 'exceljs';
-import { saveAs } from 'file-saver';
+import { ExcelHelperService } from '../../services/excel-helper.service';
 
 @Component({
   selector: 'app-profile',
@@ -39,7 +38,10 @@ export class ProfileComponent implements OnInit {
   selectedType: string = 'profiles'; // Default type
   saveMessage: string = '';
 
-  constructor(private profileService: ProfileService) {
+  constructor(
+    private profileService: ProfileService,
+    private excelHelperService: ExcelHelperService
+  ) {
     // Initialize the form group with controls and validators
     this.profileForm = new FormGroup({
       name: new FormControl('', Validators.required),
@@ -272,52 +274,12 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    // Create a new workbook and add a worksheet
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Profiles');
+    this.excelHelperService.downloadProfilesAsExcel(
+      this.profiles,
+      this.selectedType,
+      'createdDate' // Replace with your actual date field if any
+    );
 
-    // Define worksheet columns
-    worksheet.columns = [
-      { header: 'name', key: 'name' },
-      { header: 'address', key: 'address' },
-      { header: 'telephone', key: 'telephone' },
-      { header: 'email', key: 'email' },
-      { header: 'rank', key: 'rank' },
-      { header: 'description', key: 'description' },
-      { header: 'specjalisation', key: 'specjalisation' },
-      { header: 'geolocation', key: 'geolocation' },
-      { header: 'stars', key: 'stars' },
-    ];
-
-    // Add rows to the worksheet
-    const data = this.profiles.map((profile) => ({
-      name: profile.name,
-      address: profile.address || '',
-      telephone: profile.telephone || '',
-      email: profile.email || '',
-      rank: profile.rank !== undefined ? Number(profile.rank) : '',
-      description: profile.description || '',
-      specjalisation: profile.specjalisation || '',
-      geolocation: profile.geolocation || '',
-      stars: profile.stars !== undefined ? Number(profile.stars) : '',
-    }));
-
-    worksheet.addRows(data);
-
-    // Styling (Optional)
-    worksheet.getRow(1).font = { bold: true };
-
-    // Generate buffer
-    workbook.xlsx
-      .writeBuffer()
-      .then((buffer) => {
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-        saveAs(blob, `profiles_${new Date().toISOString()}.xlsx`);
-        this.saveMessage = 'Profiles have been downloaded successfully.';
-      })
-      .catch((error) => {
-        console.error('Error generating Excel file:', error);
-        this.saveMessage = 'Error downloading profiles.';
-      });
+    this.saveMessage = 'Profiles have been downloaded successfully.';
   }
 }

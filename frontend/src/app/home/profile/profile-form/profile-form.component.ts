@@ -1,3 +1,4 @@
+// src/app/profile/profile-form/profile-form.component.ts
 import { Component, OnInit, Inject } from '@angular/core';
 import {
   FormGroup,
@@ -32,6 +33,7 @@ export class ProfileFormComponent implements OnInit {
       name: new FormControl('', Validators.required),
       email: new FormControl(''),
       rank: new FormControl(0),
+      city: new FormControl('', Validators.required),
       image: new FormControl(null),
     });
     if (data && data.profile) {
@@ -40,6 +42,7 @@ export class ProfileFormComponent implements OnInit {
         name: data.profile.name,
         email: data.profile.email,
         rank: data.profile.rank,
+        city: data.profile.city,
         image: data.profile.image,
       });
       if (data.profile.image) {

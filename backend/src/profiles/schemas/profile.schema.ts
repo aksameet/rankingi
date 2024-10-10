@@ -12,7 +12,7 @@ export type ProfileDocument = Profile & Document;
     transform: (doc, ret) => {
       ret.id = ret._id;
       delete ret._id;
-      return ret; // Ensure the transformed object is returned
+      return ret;
     },
   },
 })
@@ -49,6 +49,9 @@ export class Profile {
 
   @Prop()
   website?: string;
+
+  @Prop({ required: true, index: true })
+  city!: string;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);

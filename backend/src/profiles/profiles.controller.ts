@@ -36,6 +36,22 @@ export class ProfilesController {
     return this.profilesService.findAll();
   }
 
+  @Get('city/:cityName')
+  async findAllByCity(@Param('cityName') cityName: string): Promise<Profile[]> {
+    return this.profilesService.findAllByCity(cityName);
+  }
+
+  @Delete('city/:cityName')
+  async deleteAllByCity(
+    @Param('cityName') cityName: string,
+  ): Promise<{ message: string; deletedCount?: number }> {
+    const result = await this.profilesService.deleteAllByCity(cityName);
+    return {
+      message: `All profiles in city "${cityName}" have been deleted successfully.`,
+      deletedCount: result.deletedCount,
+    };
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Profile> {
     return this.profilesService.findOne(id);

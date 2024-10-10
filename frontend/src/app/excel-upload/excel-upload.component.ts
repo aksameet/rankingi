@@ -1,3 +1,4 @@
+// src/app/excel-upload/excel-upload.component.ts
 import {
   Component,
   ViewChild,
@@ -130,6 +131,7 @@ export class ExcelUploadComponent implements OnChanges {
       geolocation: item.geolocation,
       stars: Number(item.stars),
       website: item.website,
+      city: item.city,
     }));
 
     this.profileService

@@ -1,3 +1,4 @@
+// src/profiles/profiles.controller.ts
 import {
   Controller,
   Get,
@@ -9,7 +10,10 @@ import {
 } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { Profile } from './schemas/profile.schema';
-import { CreateProfileDto } from './dto/create-profile.dto';
+import {
+  CreateProfileDto,
+  BulkCreateProfileDto,
+} from './dto/bulk-create-profile.dto';
 
 @Controller('adwokaci')
 export class ProfilesController {
@@ -20,9 +24,32 @@ export class ProfilesController {
     return this.profilesService.create(createProfileDto);
   }
 
+  @Post('bulk')
+  async createBulk(
+    @Body() bulkCreateProfileDto: BulkCreateProfileDto,
+  ): Promise<Profile[]> {
+    return this.profilesService.createBulkProfiles(bulkCreateProfileDto);
+  }
+
   @Get()
   async findAll(): Promise<Profile[]> {
     return this.profilesService.findAll();
+  }
+
+  @Get('city/:cityName')
+  async findAllByCity(@Param('cityName') cityName: string): Promise<Profile[]> {
+    return this.profilesService.findAllByCity(cityName);
+  }
+
+  @Delete('city/:cityName')
+  async deleteAllByCity(
+    @Param('cityName') cityName: string,
+  ): Promise<{ message: string; deletedCount?: number }> {
+    const result = await this.profilesService.deleteAllByCity(cityName);
+    return {
+      message: `All profiles in city "${cityName}" have been deleted successfully.`,
+      deletedCount: result.deletedCount,
+    };
   }
 
   @Get(':id')
@@ -41,5 +68,14 @@ export class ProfilesController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<any> {
     return this.profilesService.remove(id);
+  }
+
+  @Delete()
+  async deleteAll(): Promise<{ message: string; deletedCount?: number }> {
+    const result = await this.profilesService.deleteAll();
+    return {
+      message: 'All profiles have been deleted successfully.',
+      deletedCount: result.deletedCount,
+    };
   }
 }

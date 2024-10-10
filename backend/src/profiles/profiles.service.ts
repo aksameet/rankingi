@@ -22,7 +22,7 @@ export class ProfilesService {
   async createBulkProfiles(bulkData: BulkCreateProfileDto): Promise<Profile[]> {
     const bulkOps = bulkData.profiles.map((profile) => ({
       updateOne: {
-        filter: { email: profile.email }, // Use a unique field like 'email'
+        filter: { email: profile.email },
         update: { $set: profile },
         upsert: true,
       },
@@ -30,15 +30,16 @@ export class ProfilesService {
 
     await this.profileModel.bulkWrite(bulkOps, { ordered: false });
 
-    // Retrieve and return the upserted profiles
     const emails = bulkData.profiles.map((profile) => profile.email);
     return this.profileModel.find({ email: { $in: emails } }).exec();
-
-    // return this.profileModel.insertMany(bulkData.profiles);
   }
 
   async findAll(): Promise<Profile[]> {
     return this.profileModel.find().exec();
+  }
+
+  async findAllByCity(city: string): Promise<Profile[]> {
+    return this.profileModel.find({ city }).exec();
   }
 
   async findOne(id: string): Promise<Profile> {
@@ -68,6 +69,11 @@ export class ProfilesService {
 
   async deleteAll(): Promise<{ deletedCount?: number }> {
     const result = await this.profileModel.deleteMany({});
+    return { deletedCount: result.deletedCount };
+  }
+
+  async deleteAllByCity(city: string): Promise<{ deletedCount?: number }> {
+    const result = await this.profileModel.deleteMany({ city });
     return { deletedCount: result.deletedCount };
   }
 }

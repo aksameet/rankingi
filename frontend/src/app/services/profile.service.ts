@@ -1,10 +1,11 @@
+// src/app/services/profile.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 export interface Profile {
   id?: string;
-  _id?: string; // Include _id if you want to handle MongoDB document IDs
+  _id?: string;
   name: string;
   address?: string;
   telephone?: string;
@@ -16,40 +17,48 @@ export interface Profile {
   geolocation?: string;
   stars?: number;
   website?: string;
+  city: string;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
-  private apiBaseUrl = 'http://localhost:3000'; // Base URL
+  private apiBaseUrl = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
 
-  getProfiles(type: string): Observable<Profile[]> {
-    const apiUrl = `${this.apiBaseUrl}/${type}`; // Dynamic URL based on type
+  getProfiles(type: string, city?: string): Observable<Profile[]> {
+    let apiUrl = `${this.apiBaseUrl}/${type}`;
+    if (city) {
+      apiUrl += `/city/${city}`;
+    }
     return this.http.get<Profile[]>(apiUrl);
   }
 
   createProfile(profile: Profile, type: string): Observable<Profile> {
-    const apiUrl = `${this.apiBaseUrl}/${type}`; // Dynamic URL based on type
+    const apiUrl = `${this.apiBaseUrl}/${type}`;
     return this.http.post<Profile>(apiUrl, profile);
   }
 
   updateProfile(profile: Profile, type: string): Observable<Profile> {
-    const apiUrl = `${this.apiBaseUrl}/${type}/${profile.id}`; // Dynamic URL based on type
+    const apiUrl = `${this.apiBaseUrl}/${type}/${profile.id}`;
     return this.http.put<Profile>(apiUrl, profile);
   }
 
   deleteProfile(id: string, type: string): Observable<void> {
-    const apiUrl = `${this.apiBaseUrl}/${type}/${id}`; // Dynamic URL based on type
+    const apiUrl = `${this.apiBaseUrl}/${type}/${id}`;
     return this.http.delete<void>(apiUrl);
   }
 
   deleteAll(
-    type: string
+    type: string,
+    city?: string
   ): Observable<{ message: string; deletedCount?: number }> {
-    const apiUrl = `${this.apiBaseUrl}/${type}`;
+    let apiUrl = `${this.apiBaseUrl}/${type}`;
+    if (city) {
+      apiUrl += `/city/${city}`;
+    }
     return this.http.delete<{ message: string; deletedCount?: number }>(apiUrl);
   }
 

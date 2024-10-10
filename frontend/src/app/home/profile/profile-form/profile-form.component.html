@@ -1,3 +1,4 @@
+<!-- profile-form.component.html -->
 <mat-card class="form-card">
   <mat-card-header>
     <mat-card-title class="mb-3">
@@ -25,9 +26,27 @@
           <input matInput type="email" formControlName="email" />
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" class="rank">
           <mat-label>Rank</mat-label>
           <input matInput type="number" formControlName="rank" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="city">
+          <mat-label>City</mat-label>
+          <mat-select formControlName="city">
+            <mat-option value="">Default</mat-option>
+            <mat-option value="warszawa">warszawa</mat-option>
+            <mat-option value="poznan">poznan</mat-option>
+            <mat-option value="wroclaw">wroclaw</mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+              profileForm.get('city')?.invalid &&
+              profileForm.get('city')?.touched
+            "
+          >
+            City is required
+          </mat-error>
         </mat-form-field>
 
         <div class="image-field">
@@ -50,7 +69,6 @@
 
           <mat-spinner *ngIf="$loading | async"></mat-spinner>
 
-          <!-- Display Selected Image Preview -->
           <div *ngIf="selectedImage" class="image-preview">
             <img [src]="selectedImage" alt="Selected Image" />
             <button mat-button color="warn" (click)="clearImage()">

@@ -1,3 +1,4 @@
+<!-- profile-card.component.html -->
 <mat-card class="profile-card">
   <div *ngIf="profile.rank" class="rank">{{ profile.rank }}</div>
   <mat-card-header>
@@ -13,6 +14,10 @@
     <mat-card-subtitle>{{ profile.email }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
+    <div *ngIf="profile.city">
+      City:
+      <p>{{ profile.city }}</p>
+    </div>
     <div *ngIf="profile.description">
       Description:
       <p>{{ profile.description }}</p>

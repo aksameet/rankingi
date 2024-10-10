@@ -1,6 +1,8 @@
+// src/app/profile/profile.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ProfileService, Profile } from '../../services/profile.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { MaterialModule } from '../../shared/modules/material.module';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
@@ -14,6 +16,7 @@ import { ProfileFormComponent } from './profile-form/profile-form.component';
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MaterialModule,
     ProfileCardComponent,
     ExcelUploadComponent,
@@ -26,6 +29,7 @@ export class ProfileComponent implements OnInit {
   $loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   profiles: Profile[] = [];
   selectedType: string = 'profiles';
+  selectedCity: string = '';
   saveMessage: string = '';
 
   constructor(
@@ -40,18 +44,20 @@ export class ProfileComponent implements OnInit {
 
   loadProfiles() {
     this.$loading.next(true);
-    this.profileService.getProfiles(this.selectedType).subscribe(
-      (data) => {
-        this.$loading.next(false);
-        this.profiles = data;
-        this.sortProfiles();
-      },
-      (error) => {
-        this.$loading.next(false);
-        this.profiles = [];
-        console.error('Error loading profiles:', error);
-      }
-    );
+    this.profileService
+      .getProfiles(this.selectedType, this.selectedCity)
+      .subscribe(
+        (data) => {
+          this.$loading.next(false);
+          this.profiles = data;
+          this.sortProfiles();
+        },
+        (error) => {
+          this.$loading.next(false);
+          this.profiles = [];
+          console.error('Error loading profiles:', error);
+        }
+      );
   }
 
   sortProfiles() {
@@ -75,6 +81,17 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  onTypeChanged(selectedType: string) {
+    this.profiles = [];
+    this.selectedType = selectedType;
+    this.loadProfiles();
+  }
+
+  onCityChanged(selectedCity: string) {
+    this.selectedCity = selectedCity;
+    this.loadProfiles();
+  }
+
   openAddProfileDialog() {
     const dialogRef = this.dialog.open(ProfileFormComponent);
 
@@ -83,6 +100,7 @@ export class ProfileComponent implements OnInit {
         const profileData: Profile = {
           id: '',
           ...result.data,
+          city: this.selectedCity,
         };
         this.addProfile(profileData);
       }
@@ -142,6 +160,10 @@ export class ProfileComponent implements OnInit {
     );
   }
 
+  onDeleteProfile(id: string) {
+    this.deleteProfile(id);
+  }
+
   deleteProfile(id: string) {
     this.$loading.next(true);
     this.profileService.deleteProfile(id, this.selectedType).subscribe(
@@ -157,16 +179,6 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  onDeleteProfile(id: string) {
-    this.deleteProfile(id);
-  }
-
-  onTypeChanged(selectedType: string) {
-    this.profiles = [];
-    this.selectedType = selectedType;
-    this.loadProfiles();
-  }
-
   onBulkUploadComplete(): void {
     this.loadProfiles();
   }
@@ -174,18 +186,20 @@ export class ProfileComponent implements OnInit {
   deleteAllProfiles(): void {
     if (confirm('Are you sure you want to delete all profiles?')) {
       this.$loading.next(true);
-      this.profileService.deleteAll(this.selectedType).subscribe({
-        next: () => {
-          this.$loading.next(false);
-          this.profiles = [];
-          this.saveMessage = 'All profiles have been deleted successfully.';
-        },
-        error: (error: any) => {
-          this.$loading.next(false);
-          console.error('Error deleting all profiles:', error);
-          this.saveMessage = 'Error deleting all profiles.';
-        },
-      });
+      this.profileService
+        .deleteAll(this.selectedType, this.selectedCity)
+        .subscribe({
+          next: () => {
+            this.$loading.next(false);
+            this.profiles = [];
+            this.saveMessage = 'All profiles have been deleted successfully.';
+          },
+          error: (error: any) => {
+            this.$loading.next(false);
+            console.error('Error deleting all profiles:', error);
+            this.saveMessage = 'Error deleting all profiles.';
+          },
+        });
     }
   }
 
@@ -197,7 +211,7 @@ export class ProfileComponent implements OnInit {
 
     this.excelHelperService.downloadProfilesAsExcel(
       this.profiles,
-      this.selectedType,
+      `${this.selectedType}_${this.selectedCity}`,
       'createdDate'
     );
 

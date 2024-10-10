@@ -18,19 +18,38 @@ export class Profile {
   @Prop({ required: true })
   name!: string;
 
-  @Prop({ required: false })
-  email!: string;
+  @Prop()
+  address?: string;
 
-  @Prop({ required: false })
-  rank!: number;
+  @Prop()
+  telephone?: string;
 
-  @Prop({ required: false })
-  image!: string;
+  @Prop({ required: true, unique: true })
+  email?: string;
 
-  @Prop({ required: false })
-  description!: string;
+  @Prop()
+  rank?: number;
 
-  // Add additional fields as needed
+  @Prop()
+  image?: string;
+
+  @Prop()
+  description?: string;
+
+  @Prop()
+  specialization?: string;
+
+  @Prop()
+  geolocation?: string;
+
+  @Prop()
+  stars?: number;
+
+  @Prop()
+  website?: string;
+
+  @Prop({ required: true, index: true })
+  city!: string;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);

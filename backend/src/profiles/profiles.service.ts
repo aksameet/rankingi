@@ -11,7 +11,7 @@ import {
 @Injectable()
 export class ProfilesService {
   constructor(
-    @InjectModel('Default') private profileModel: Model<ProfileDocument>,
+    @InjectModel('Profiles') private profileModel: Model<ProfileDocument>,
   ) {}
 
   async create(profileData: CreateProfileDto): Promise<Profile> {

@@ -7,7 +7,7 @@ import { Profile, ProfileSchema } from './schemas/profile.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Default', schema: ProfileSchema }]),
+    MongooseModule.forFeature([{ name: 'Profiles', schema: ProfileSchema }]),
   ],
   providers: [ProfilesService],
   controllers: [ProfilesController],

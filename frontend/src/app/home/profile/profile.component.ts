@@ -14,6 +14,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
 import { ExcelUploadComponent } from '../../excel-upload/excel-upload.component';
 import { ExcelHelperService } from '../../services/excel-helper.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-profile',
@@ -103,7 +104,6 @@ export class ProfileComponent implements OnInit {
         email: this.profileForm.value.email,
         rank: this.profileForm.value.rank,
         image: this.profileForm.value.image,
-        description: this.profileForm.value.description,
       };
 
       if (this.selectedImage) {
@@ -193,7 +193,7 @@ export class ProfileComponent implements OnInit {
       name: profile.name,
       email: profile.email,
       rank: profile.rank,
-      description: profile.description,
+      image: profile.image,
     });
 
     if (profile.image) {

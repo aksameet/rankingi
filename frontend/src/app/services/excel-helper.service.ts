@@ -42,6 +42,7 @@ export class ExcelHelperService {
       { header: 'specialization', key: 'specialization', width: 20 },
       { header: 'geolocation', key: 'geolocation', width: 20 },
       { header: 'stars', key: 'stars', width: 6 },
+      { header: 'website', key: 'website', width: 20 },
       // Add more columns if needed
     ];
 
@@ -57,6 +58,7 @@ export class ExcelHelperService {
         specialization: profile.specialization || '',
         geolocation: profile.geolocation || '',
         stars: profile.stars !== undefined ? Number(profile.stars) : '',
+        website: profile.website || '',
         // Add more fields if needed
       });
     });

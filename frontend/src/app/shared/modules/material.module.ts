@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
 // Add more imports as needed
 
 const materialModules = [
@@ -18,6 +19,7 @@ const materialModules = [
   MatCardModule,
   MatProgressSpinnerModule,
   MatSelectModule,
+  MatDialogModule,
   // Add more modules here
 ];
 

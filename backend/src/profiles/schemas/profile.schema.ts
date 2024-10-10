@@ -46,6 +46,9 @@ export class Profile {
 
   @Prop()
   stars?: number;
+
+  @Prop()
+  website?: string;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);

@@ -15,6 +15,7 @@ export interface Profile {
   specialization?: string;
   geolocation?: string;
   stars?: number;
+  website?: string;
 }
 
 @Injectable({

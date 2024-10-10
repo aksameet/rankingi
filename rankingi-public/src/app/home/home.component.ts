@@ -27,6 +27,7 @@ export class HomeComponent {
     this.$loading.next(true);
     this.profileService.getProfiles(this.selectedType).subscribe(
       (data) => {
+        console.log(data);
         this.$loading.next(false);
         this.profiles = data;
         this.sortProfiles();

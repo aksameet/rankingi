@@ -46,6 +46,10 @@ export class CreateProfileDto {
   @IsNumber()
   @IsOptional()
   stars?: number;
+
+  @IsString()
+  @IsOptional()
+  website?: number;
 }
 
 export class BulkCreateProfileDto {

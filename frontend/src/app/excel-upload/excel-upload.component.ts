@@ -125,6 +125,7 @@ export class ExcelUploadComponent {
       specialization: item.specialization,
       geolocation: item.geolocation,
       stars: Number(item.stars),
+      website: item.website,
     }));
 
     const payload = { profiles: profiles };

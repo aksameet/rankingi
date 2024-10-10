@@ -1,17 +1,26 @@
 .form-card {
   width: 100%;
-  margin: 0 auto 40px;
-  padding-bottom: 20px;
+  min-width: 80vw;
+  min-height: 70vh;
+  margin: 0;
 }
 
 .form-fields {
   display: flex;
   flex-wrap: wrap;
+  gap: 20px;
   .mat-mdc-form-field {
     width: 45%;
     &:last-of-type {
       width: 10%;
     }
+  }
+
+  .image-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
   }
 }
 

@@ -30,29 +30,33 @@
           <input matInput type="number" formControlName="rank" />
         </mat-form-field>
 
-        <div class="file-input">
-          <input
-            type="file"
-            #fileInput
-            (change)="onFileSelected($event)"
-            accept="image/*"
-            hidden
-          />
-          <button mat-raised-button type="button" (click)="fileInput.click()">
-            <mat-icon>upload</mat-icon>
-            Upload Profile Picture
-          </button>
-          <span class="file-name" *ngIf="selectedImage"> Image Selected </span>
-        </div>
+        <div class="image-field">
+          <div class="file-input">
+            <input
+              type="file"
+              #fileInput
+              (change)="onFileSelected($event)"
+              accept="image/*"
+              hidden
+            />
+            <button mat-raised-button type="button" (click)="fileInput.click()">
+              <mat-icon>upload</mat-icon>
+              Upload Profile Picture
+            </button>
+            <span class="file-name" *ngIf="selectedImage">
+              Image Selected
+            </span>
+          </div>
 
-        <mat-spinner *ngIf="$loading | async"></mat-spinner>
+          <mat-spinner *ngIf="$loading | async"></mat-spinner>
 
-        <!-- Display Selected Image Preview -->
-        <div *ngIf="selectedImage" class="image-preview">
-          <img [src]="selectedImage" alt="Selected Image" />
-          <button mat-button color="warn" (click)="clearImage()">
-            Remove Image
-          </button>
+          <!-- Display Selected Image Preview -->
+          <div *ngIf="selectedImage" class="image-preview">
+            <img [src]="selectedImage" alt="Selected Image" />
+            <button mat-button color="warn" (click)="clearImage()">
+              Remove Image
+            </button>
+          </div>
         </div>
       </div>
 

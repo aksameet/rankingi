@@ -76,9 +76,7 @@ export class ProfileComponent implements OnInit {
   }
 
   openAddProfileDialog() {
-    const dialogRef = this.dialog.open(ProfileFormComponent, {
-      width: '500px',
-    });
+    const dialogRef = this.dialog.open(ProfileFormComponent);
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result && result.data) {
@@ -108,7 +106,6 @@ export class ProfileComponent implements OnInit {
 
   onEditProfile(profile: Profile) {
     const dialogRef = this.dialog.open(ProfileFormComponent, {
-      width: '500px',
       data: {
         profile: profile,
       },

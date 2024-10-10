@@ -1,18 +1,15 @@
-// src/profiles/schemas/profile.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 export type ProfileDocument = Profile & Document;
 
 @Schema({
-  collection: 'profiles',
   toJSON: {
     virtuals: true,
     versionKey: false,
     transform: (doc, ret) => {
       ret.id = ret._id;
       delete ret._id;
-      return ret;
     },
   },
 })

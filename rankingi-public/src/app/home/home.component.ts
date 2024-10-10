@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { MaterialModule } from '../shared/modules/material.module';
 import { Profile, ProfileService } from '../services/profiles.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,9 @@ import { Profile, ProfileService } from '../services/profiles.service';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+  $loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   profiles: Profile[] = [];
+  selectedType: string = 'profiles'; // Default type
 
   constructor(private profileService: ProfileService) {}
 
@@ -21,10 +24,19 @@ export class HomeComponent {
   }
 
   loadProfiles() {
-    this.profileService.getProfiles().subscribe((data) => {
-      this.profiles = data;
-      this.sortProfiles();
-    });
+    this.$loading.next(true);
+    this.profileService.getProfiles(this.selectedType).subscribe(
+      (data) => {
+        this.$loading.next(false);
+        this.profiles = data;
+        this.sortProfiles();
+      },
+      (error) => {
+        this.$loading.next(false);
+        this.profiles = [];
+        console.error('Error loading profiles:', error);
+      }
+    );
   }
 
   sortProfiles() {

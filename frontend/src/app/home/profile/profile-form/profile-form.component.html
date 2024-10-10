@@ -5,21 +5,8 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content class="input-form-content">
-    <mat-form-field appearance="outline">
-      <mat-label>Type</mat-label>
-      <mat-select
-        [(value)]="selectedType"
-        (selectionChange)="onTypeChanged($event)"
-      >
-        <mat-option value="profiles">Profiles</mat-option>
-        <mat-option value="adwokaci">Adowkaci</mat-option>
-        <mat-option value="radcowie">Radcowie</mat-option>
-      </mat-select>
-    </mat-form-field>
-
     <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
       <div class="form-fields">
-        <!-- Name Field -->
         <mat-form-field appearance="outline">
           <mat-label>Name</mat-label>
           <input matInput type="text" formControlName="name" />
@@ -33,19 +20,16 @@
           </mat-error>
         </mat-form-field>
 
-        <!-- Email Field -->
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input matInput type="email" formControlName="email" />
         </mat-form-field>
 
-        <!-- Rank Field -->
         <mat-form-field appearance="outline">
           <mat-label>Rank</mat-label>
           <input matInput type="number" formControlName="rank" />
         </mat-form-field>
 
-        <!-- Image Upload -->
         <div class="file-input">
           <input
             type="file"
@@ -72,7 +56,6 @@
         </div>
       </div>
 
-      <!-- Submit Button -->
       <mat-card-actions align="end">
         <button
           mat-raised-button

@@ -1,9 +1,15 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, Inject } from '@angular/core';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { MaterialModule } from '../../../shared/modules/material.module';
-import { MatSelectChange } from '@angular/material/select';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import imageCompression from 'browser-image-compression';
 
 @Component({
   selector: 'app-profile-form',
@@ -13,43 +19,90 @@ import { MatSelectChange } from '@angular/material/select';
   styleUrls: ['./profile-form.component.scss'],
 })
 export class ProfileFormComponent implements OnInit {
-  selectedType: string = 'profiles';
+  profileForm: FormGroup;
+  selectedImage: string | null = null;
+  editingProfileId: string | null = null;
+  $loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  @Input() profileForm!: FormGroup;
-  @Input() editingProfileId!: string | null;
-  @Input() selectedImage!: string | null;
-  @Input() $loading!: BehaviorSubject<boolean>;
-
-  @Output() submitProfile = new EventEmitter<void>();
-  @Output() resetProfileForm = new EventEmitter<void>();
-  @Output() imageSelected = new EventEmitter<File>();
-  @Output() imageCleared = new EventEmitter<void>();
-  @Output() typeChanged = new EventEmitter<string>();
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialogRef: MatDialogRef<ProfileFormComponent>
+  ) {
+    this.profileForm = new FormGroup({
+      name: new FormControl('', Validators.required),
+      email: new FormControl(''),
+      rank: new FormControl(0),
+      image: new FormControl(null),
+    });
+    if (data && data.profile) {
+      this.editingProfileId = data.profile.id || null;
+      this.profileForm.patchValue({
+        name: data.profile.name,
+        email: data.profile.email,
+        rank: data.profile.rank,
+        image: data.profile.image,
+      });
+      if (data.profile.image) {
+        this.selectedImage = 'data:image/jpeg;base64,' + data.profile.image;
+      }
+    }
+  }
 
   ngOnInit() {}
 
   onSubmit() {
-    this.submitProfile.emit();
+    if (this.profileForm.valid) {
+      const profileData = { ...this.profileForm.value };
+      if (this.selectedImage) {
+        const base64Data = this.selectedImage.replace(
+          /^data:image\/\w+;base64,/,
+          ''
+        );
+        profileData.image = base64Data;
+      }
+      this.dialogRef.close({
+        data: profileData,
+        editingId: this.editingProfileId,
+      });
+    } else {
+      this.profileForm.markAllAsTouched();
+    }
   }
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
-      this.imageSelected.emit(file);
+      const options = {
+        maxSizeMB: 0.0025,
+        maxWidthOrHeight: 500,
+        useWebWorker: true,
+      };
+      this.$loading.next(true);
+      imageCompression(file, options)
+        .then((compressedFile) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            this.selectedImage = reader.result as string;
+            this.profileForm.get('image')?.setValue(this.selectedImage);
+            this.$loading.next(false);
+          };
+          reader.readAsDataURL(compressedFile);
+        })
+        .catch((error) => {
+          console.error('Error compressing image:', error);
+          this.$loading.next(false);
+        });
     } else {
       console.log('Error handling file upload');
     }
   }
 
   clearImage() {
-    this.imageCleared.emit();
+    this.selectedImage = null;
+    this.profileForm.get('image')?.setValue(null);
   }
 
   resetForm() {
-    this.resetProfileForm.emit();
-  }
-
-  onTypeChanged(event: MatSelectChange) {
-    this.typeChanged.emit(event.value);
+    this.dialogRef.close();
   }
 }

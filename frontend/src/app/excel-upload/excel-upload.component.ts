@@ -1,9 +1,16 @@
-// excel-upload.component.ts
-import { CommonModule } from '@angular/common';
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import * as ExcelJS from 'exceljs';
 import { ProfileService, Profile } from '../services/profile.service';
-import { Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../shared/modules/material.module';
 
 @Component({
@@ -13,8 +20,9 @@ import { MaterialModule } from '../shared/modules/material.module';
   styleUrls: ['./excel-upload.component.scss'],
   imports: [CommonModule, MaterialModule],
 })
-export class ExcelUploadComponent {
+export class ExcelUploadComponent implements OnChanges {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @Input() selectedType: string = 'profiles';
   @Output() bulkUploadComplete = new EventEmitter<void>();
 
   jsonData: any[] = [];
@@ -22,8 +30,15 @@ export class ExcelUploadComponent {
   isLoading: boolean = false;
   isSaving: boolean = false;
   saveMessage: string = '';
+  isErrorMessage: boolean = false;
 
   constructor(private profileService: ProfileService) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedType'] && !changes['selectedType'].firstChange) {
+      this.clearData();
+    }
+  }
 
   triggerFileInput(): void {
     this.fileInput.nativeElement.click();
@@ -31,10 +46,7 @@ export class ExcelUploadComponent {
 
   onFileChange(event: any): void {
     const file: File = event.target.files[0];
-
-    this.errorMessage = '';
-    this.jsonData = [];
-    this.saveMessage = '';
+    this.clearMessages();
 
     if (file) {
       const validTypes = [
@@ -42,13 +54,14 @@ export class ExcelUploadComponent {
         'application/vnd.ms-excel',
       ];
       if (!validTypes.includes(file.type)) {
-        this.errorMessage = 'Please upload a valid Excel file (.xlsx or .xls)';
-        console.error(this.errorMessage);
+        this.setErrorMessage(
+          'Please upload a valid Excel file (.xlsx or .xls)'
+        );
         return;
       }
 
       this.isLoading = true;
-      const reader: FileReader = new FileReader();
+      const reader = new FileReader();
 
       reader.onload = async (e: any) => {
         try {
@@ -56,21 +69,16 @@ export class ExcelUploadComponent {
           const workbook = new ExcelJS.Workbook();
           await workbook.xlsx.load(arrayBuffer);
           const worksheet = workbook.worksheets[0];
-
-          const jsonData = this.convertSheetToJSON(worksheet);
-          this.jsonData = jsonData;
-          console.log('Excel Data as JSON:', jsonData);
-        } catch (error) {
-          this.errorMessage = 'Error processing Excel file.';
-          console.error('Error processing Excel file:', error);
+          this.jsonData = this.convertSheetToJSON(worksheet);
+        } catch {
+          this.setErrorMessage('Error processing Excel file.');
         } finally {
           this.isLoading = false;
         }
       };
 
-      reader.onerror = (error) => {
-        this.errorMessage = 'Error reading file.';
-        console.error('FileReader error:', error);
+      reader.onerror = () => {
+        this.setErrorMessage('Error reading file.');
         this.isLoading = false;
       };
 
@@ -93,11 +101,8 @@ export class ExcelUploadComponent {
           const header = headers[colNumber - 1] || `column${colNumber}`;
           rowData[header] = cell.text.trim();
         });
-
         if (rowData['name'] && rowData['name'].trim() !== '') {
           jsonData.push(rowData);
-        } else {
-          console.warn(`Row ${rowNumber} skipped: Missing 'name' value.`);
         }
       }
     });
@@ -107,13 +112,12 @@ export class ExcelUploadComponent {
 
   saveToBackend(): void {
     if (this.jsonData.length === 0) {
-      this.saveMessage = 'No data to save.';
+      this.setErrorMessage('No data to save.');
       return;
     }
 
     this.isSaving = true;
-    this.saveMessage = '';
-    this.errorMessage = '';
+    this.clearMessages();
 
     const profiles: Profile[] = this.jsonData.map((item) => ({
       name: item.name,
@@ -128,28 +132,49 @@ export class ExcelUploadComponent {
       website: item.website,
     }));
 
-    const payload = { profiles: profiles };
+    this.profileService
+      .createProfiles({ profiles }, this.selectedType)
+      .subscribe({
+        next: () => {
+          this.setSaveMessage('Data saved successfully!');
+          this.jsonData = [];
+          this.bulkUploadComplete.emit();
+        },
+        error: () => {
+          this.setErrorMessage('Error saving data.');
+          this.isSaving = false;
+          this.clearData();
+        },
+        complete: () => {
+          this.isSaving = false;
+        },
+      });
+  }
 
-    this.profileService.createProfiles(payload, 'profiles').subscribe({
-      next: (response) => {
-        console.log('Data saved successfully:', response);
-        this.saveMessage = 'Data saved successfully!';
-        this.jsonData = [];
-        this.bulkUploadComplete.emit();
-        setTimeout(() => {
-          this.saveMessage = '';
-        }, 3000);
-      },
-      error: (error) => {
-        console.error('Error saving data:', error);
-        this.saveMessage = 'Error saving data.';
-        setTimeout(() => {
-          this.saveMessage = '';
-        }, 3000);
-      },
-      complete: () => {
-        this.isSaving = false;
-      },
-    });
+  clearData(): void {
+    this.jsonData = [];
+    this.clearMessages();
+  }
+
+  private clearMessages(): void {
+    this.errorMessage = '';
+    this.saveMessage = '';
+    this.isErrorMessage = false;
+  }
+
+  private setErrorMessage(message: string): void {
+    this.errorMessage = message;
+    this.isErrorMessage = true;
+    setTimeout(() => {
+      this.errorMessage = '';
+    }, 5000);
+  }
+
+  private setSaveMessage(message: string): void {
+    this.saveMessage = message;
+    this.isErrorMessage = false;
+    setTimeout(() => {
+      this.saveMessage = '';
+    }, 5000);
   }
 }

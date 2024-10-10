@@ -1,31 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService, Profile } from '../../services/profile.service';
 import { CommonModule } from '@angular/common';
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import imageCompression from 'browser-image-compression';
+import { BehaviorSubject } from 'rxjs';
 import { MaterialModule } from '../../shared/modules/material.module';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
-import { BehaviorSubject } from 'rxjs';
-import { ProfileFormComponent } from './profile-form/profile-form.component';
 import { ExcelUploadComponent } from '../../excel-upload/excel-upload.component';
 import { ExcelHelperService } from '../../services/excel-helper.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ProfileFormComponent } from './profile-form/profile-form.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     MaterialModule,
     ProfileCardComponent,
-    ProfileFormComponent,
     ExcelUploadComponent,
+    MatDialogModule,
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
@@ -33,30 +25,19 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 export class ProfileComponent implements OnInit {
   $loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   profiles: Profile[] = [];
-  profileForm: FormGroup;
-  selectedImage: string | null = null;
-  editingProfileId: string | null = null;
-  selectedType: string = 'profiles'; // Default type
+  selectedType: string = 'profiles';
   saveMessage: string = '';
 
   constructor(
     private profileService: ProfileService,
-    private excelHelperService: ExcelHelperService
-  ) {
-    // Initialize the form group with controls and validators
-    this.profileForm = new FormGroup({
-      name: new FormControl('', Validators.required),
-      email: new FormControl('', Validators.required),
-      rank: new FormControl(0),
-      image: new FormControl(null),
-    });
-  }
+    private excelHelperService: ExcelHelperService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
-    this.loadProfiles(); // Load profiles initially with default type
+    this.loadProfiles();
   }
 
-  // Load profiles based on the selected type
   loadProfiles() {
     this.$loading.next(true);
     this.profileService.getProfiles(this.selectedType).subscribe(
@@ -73,7 +54,6 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  // Handle sorting logic
   sortProfiles() {
     this.profiles.sort((a, b) => {
       const rankA = a.rank;
@@ -83,139 +63,88 @@ export class ProfileComponent implements OnInit {
       const isRankBNull = rankB == null || rankB === 0;
 
       if (isRankANull && isRankBNull) {
-        return 0; // Both ranks are null, undefined, or 0
+        return 0;
       }
       if (isRankANull) {
-        return 1; // 'a' has no rank or rank 0, place it after 'b'
+        return 1;
       }
       if (isRankBNull) {
-        return -1; // 'b' has no rank or rank 0, place 'a' before 'b'
+        return -1;
       }
-      return rankA - rankB; // Both ranks are valid numbers, sort normally
+      return rankA - rankB;
     });
   }
 
-  // Handle profile addition or update
-  addOrUpdateProfile() {
-    if (this.profileForm.valid) {
-      const profileData: Profile = {
-        id: this.editingProfileId || '',
-        name: this.profileForm.value.name,
-        email: this.profileForm.value.email,
-        rank: this.profileForm.value.rank,
-        image: this.profileForm.value.image,
-      };
+  openAddProfileDialog() {
+    const dialogRef = this.dialog.open(ProfileFormComponent, {
+      width: '500px',
+    });
 
-      if (this.selectedImage) {
-        // Remove the data URL prefix
-        const base64Data = this.selectedImage.replace(
-          /^data:image\/\w+;base64,/,
-          ''
-        );
-        profileData.image = base64Data;
-      }
-
-      this.$loading.next(true);
-
-      if (this.editingProfileId) {
-        // Update existing profile
-        this.profileService
-          .updateProfile(profileData, this.selectedType)
-          .subscribe(
-            (updatedProfile) => {
-              this.$loading.next(false);
-              // Update the profile in the list
-              const index = this.profiles.findIndex(
-                (p) => p.id === updatedProfile.id
-              );
-              if (index !== -1) {
-                this.profiles[index] = updatedProfile;
-              }
-              this.sortProfiles();
-              this.resetForm();
-            },
-            (error) => {
-              this.$loading.next(false);
-              console.error('Error updating profile:', error);
-            }
-          );
-      } else {
-        // Add new profile
-        this.profileService
-          .createProfile(profileData, this.selectedType)
-          .subscribe(
-            (createdProfile) => {
-              this.$loading.next(false);
-              this.profiles.push(createdProfile);
-              this.sortProfiles();
-              this.resetForm();
-            },
-            (error) => {
-              this.$loading.next(false);
-              console.error('Error creating profile:', error);
-            }
-          );
-      }
-    } else {
-      // Mark all controls as touched to show validation errors
-      this.profileForm.markAllAsTouched();
-    }
-  }
-
-  // Handle file selection and compression
-  onFileSelected(file: File) {
-    const options = {
-      maxSizeMB: 0.0025,
-      maxWidthOrHeight: 500,
-      useWebWorker: true,
-    };
-    this.$loading.next(true);
-    imageCompression(file, options)
-      .then((compressedFile) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.selectedImage = reader.result as string;
-          this.profileForm.get('image')?.setValue(this.selectedImage);
-          this.$loading.next(false);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.data) {
+        const profileData: Profile = {
+          id: '',
+          ...result.data,
         };
-        reader.readAsDataURL(compressedFile);
-      })
-      .catch((error) => {
-        console.error('Error compressing image:', error);
-        this.$loading.next(false);
-      });
+        this.addProfile(profileData);
+      }
+    });
   }
 
-  // Edit profile and populate form with existing data
+  addProfile(profileData: Profile) {
+    this.$loading.next(true);
+    this.profileService.createProfile(profileData, this.selectedType).subscribe(
+      (createdProfile) => {
+        this.$loading.next(false);
+        this.profiles.push(createdProfile);
+        this.sortProfiles();
+      },
+      (error) => {
+        this.$loading.next(false);
+        console.error('Error creating profile:', error);
+      }
+    );
+  }
+
   onEditProfile(profile: Profile) {
-    this.editingProfileId = profile.id || null;
-    this.profileForm.patchValue({
-      name: profile.name,
-      email: profile.email,
-      rank: profile.rank,
-      image: profile.image,
+    const dialogRef = this.dialog.open(ProfileFormComponent, {
+      width: '500px',
+      data: {
+        profile: profile,
+      },
     });
 
-    if (profile.image) {
-      this.selectedImage = 'data:image/jpeg;base64,' + profile.image;
-      this.profileForm.get('image')?.setValue(this.selectedImage);
-    }
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.data) {
+        const profileData: Profile = {
+          id: result.editingId || '',
+          ...result.data,
+        };
+        this.updateProfile(profileData);
+      }
+    });
   }
 
-  // Reset form after profile submission or cancellation
-  resetForm() {
-    this.profileForm.reset();
-    this.selectedImage = null;
-    this.editingProfileId = null;
+  updateProfile(profileData: Profile) {
+    this.$loading.next(true);
+    this.profileService.updateProfile(profileData, this.selectedType).subscribe(
+      (updatedProfile) => {
+        this.$loading.next(false);
+        const index = this.profiles.findIndex(
+          (p) => p.id === updatedProfile.id
+        );
+        if (index !== -1) {
+          this.profiles[index] = updatedProfile;
+        }
+        this.sortProfiles();
+      },
+      (error) => {
+        this.$loading.next(false);
+        console.error('Error updating profile:', error);
+      }
+    );
   }
 
-  // Clear selected image
-  clearImage() {
-    this.selectedImage = null;
-    this.profileForm.get('image')?.setValue(null);
-  }
-
-  // Delete profile
   deleteProfile(id: string) {
     this.$loading.next(true);
     this.profileService.deleteProfile(id, this.selectedType).subscribe(
@@ -232,21 +161,16 @@ export class ProfileComponent implements OnInit {
   }
 
   onDeleteProfile(id: string) {
-    if (this.editingProfileId === id) {
-      this.resetForm();
-    }
     this.deleteProfile(id);
   }
 
-  // Triggered when profile type changes in the dropdown
-  onTypeChanged(event: string) {
-    this.profiles = []; // Clear the current list of profiles
-    this.selectedType = event;
-    this.loadProfiles(); // Re-fetch profiles based on selected type
+  onTypeChanged(selectedType: string) {
+    this.profiles = [];
+    this.selectedType = selectedType;
+    this.loadProfiles();
   }
 
   onBulkUploadComplete(): void {
-    this.resetForm();
     this.loadProfiles();
   }
 
@@ -277,7 +201,7 @@ export class ProfileComponent implements OnInit {
     this.excelHelperService.downloadProfilesAsExcel(
       this.profiles,
       this.selectedType,
-      'createdDate' // Replace with your actual date field if any
+      'createdDate'
     );
 
     this.saveMessage = 'Profiles have been downloaded successfully.';

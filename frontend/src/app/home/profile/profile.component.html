@@ -1,9 +1,25 @@
-<app-excel-upload (bulkUploadComplete)="onBulkUploadComplete()">
+<app-excel-upload
+  (bulkUploadComplete)="onBulkUploadComplete()"
+  [selectedType]="selectedType"
+>
 </app-excel-upload>
 
-<!-- Delete All Button -->
+<mat-form-field appearance="outline">
+  <mat-label>Type</mat-label>
+  <mat-select
+    [(value)]="selectedType"
+    (selectionChange)="onTypeChanged($event.value)"
+  >
+    <mat-option value="profiles">Profiles</mat-option>
+    <mat-option value="adwokaci">Adwokaci</mat-option>
+    <mat-option value="radcowie">Radcowie</mat-option>
+  </mat-select>
+</mat-form-field>
 
 <div class="action-buttons">
+  <button mat-raised-button color="primary" (click)="openAddProfileDialog()">
+    Add Profile
+  </button>
   <button
     mat-raised-button
     color="warn"
@@ -15,25 +31,10 @@
   <button mat-raised-button color="primary" (click)="downloadProfilesAsExcel()">
     Download Profiles as Excel
   </button>
-  <!-- Add other buttons like Add Profile, Delete All, etc. -->
 </div>
 
-<!-- Save Message -->
 <div *ngIf="saveMessage" class="save-message">{{ saveMessage }}</div>
 
-<app-profile-form
-  [profileForm]="profileForm"
-  [editingProfileId]="editingProfileId"
-  [selectedImage]="selectedImage"
-  [$loading]="$loading"
-  (submitProfile)="addOrUpdateProfile()"
-  (resetProfileForm)="resetForm()"
-  (imageSelected)="onFileSelected($event)"
-  (imageCleared)="clearImage()"
-  (typeChanged)="onTypeChanged($event)"
-></app-profile-form>
-
-<!-- Display Existing Profiles -->
 <h2 class="title">Existing Profiles</h2>
 <div class="profile-wrapper">
   <app-profile-card

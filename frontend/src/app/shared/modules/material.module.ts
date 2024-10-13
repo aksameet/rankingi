@@ -20,6 +20,7 @@ const materialModules = [
   MatProgressSpinnerModule,
   MatSelectModule,
   MatDialogModule,
+  MatDialogModule,
   // Add more modules here
 ];
 

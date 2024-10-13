@@ -6,10 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { MaterialModule } from '../../shared/modules/material.module';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
-import { ExcelUploadComponent } from '../../excel-upload/excel-upload.component';
 import { ExcelHelperService } from '../../services/excel-helper.service';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
+import { ExcelUploadComponent } from '../../components/excel-upload/excel-upload.component';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +20,6 @@ import { ProfileFormComponent } from './profile-form/profile-form.component';
     MaterialModule,
     ProfileCardComponent,
     ExcelUploadComponent,
-    MatDialogModule,
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],

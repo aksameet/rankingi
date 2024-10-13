@@ -10,9 +10,9 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import * as ExcelJS from 'exceljs';
-import { ProfileService, Profile } from '../services/profile.service';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from '../shared/modules/material.module';
+import { MaterialModule } from '../../shared/modules/material.module';
+import { Profile, ProfileService } from '../../services/profile.service';
 
 @Component({
   standalone: true,

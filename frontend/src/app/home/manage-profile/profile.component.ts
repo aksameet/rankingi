@@ -101,7 +101,6 @@ export class ProfileComponent implements OnInit {
         const profileData: Profile = {
           id: '',
           ...result.data,
-          city: this.selectedCity,
         };
         this.addProfile(profileData);
       }

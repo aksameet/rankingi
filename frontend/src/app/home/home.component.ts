@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { ProfileComponent } from './manage-profile/profile.component';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ProfileComponent, MatButtonModule],
+  imports: [MatButtonModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })

@@ -1,4 +1,7 @@
 <!-- profile.component.html -->
+<button mat-raised-button color="primary" class="logout" (click)="logout()">
+  Logout
+</button>
 <app-excel-upload
   (bulkUploadComplete)="onBulkUploadComplete()"
   [selectedType]="selectedType"
@@ -15,8 +18,6 @@
     <mat-option value="adwokaci">Adwokaci</mat-option>
     <mat-option value="radcowie">Radcowie</mat-option>
   </mat-select>
-
-  <button mat-raised-button color="primary" (click)="logout()">Logout</button>
 </mat-form-field>
 
 <mat-form-field appearance="outline">

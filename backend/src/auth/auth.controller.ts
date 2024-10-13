@@ -1,20 +1,49 @@
-// auth.controller.ts
-import { Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Response,
+  HttpStatus,
+  Get,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 
-@Controller()
+@Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('auth/login')
-  async login(@Request() req) {
-    const user = await this.authService.validateUser(
-      req.body.username,
-      req.body.password,
-    );
+  @Post('login')
+  async login(@Body() body, @Response() res) {
+    const { username, password } = body;
+    const user = await this.authService.validateUser(username, password);
     if (!user) {
-      return { message: 'Invalid credentials' };
+      return res
+        .status(HttpStatus.UNAUTHORIZED)
+        .json({ message: 'Invalid credentials' });
     }
-    return this.authService.login(user);
+    const jwt = await this.authService.login(user);
+    res.cookie('jwt', jwt.access_token, {
+      httpOnly: true,
+      secure: false, // Set to true in production with HTTPS
+      sameSite: 'Lax',
+      maxAge: 3600000, // 1 hour
+    });
+    return res.status(HttpStatus.OK).json({ message: 'Login successful' });
+  }
+
+  @Get('status')
+  async status(@Response() res) {
+    const token = res.req.cookies['jwt'];
+    if (!token) {
+      return res.status(HttpStatus.OK).json({ authenticated: false });
+    }
+    try {
+      const payload = await this.authService.verifyToken(token);
+      return res
+        .status(HttpStatus.OK)
+        .json({ authenticated: true, user: payload });
+    } catch (error) {
+      return res.status(HttpStatus.OK).json({ authenticated: false });
+    }
   }
 }

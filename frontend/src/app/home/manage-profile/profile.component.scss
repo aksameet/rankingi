@@ -1,4 +1,10 @@
 /* Profile Grid Styling */
+:host {
+  display: block;
+  width: 100%;
+  padding: 10px;
+}
+
 .profile-wrapper {
   display: flex;
   width: 100%;

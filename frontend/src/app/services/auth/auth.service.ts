@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, tap, map } from 'rxjs';
+import { Observable, of, tap, map, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private apiBaseUrl = 'http://localhost:3000';
-  private isLoggedIn = false;
+  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -20,7 +21,7 @@ export class AuthService {
       )
       .pipe(
         tap(() => {
-          this.isLoggedIn = true;
+          this.isLoggedInSubject.next(true);
         })
       );
   }
@@ -30,30 +31,26 @@ export class AuthService {
       .post(`${this.apiBaseUrl}/auth/logout`, {}, { withCredentials: true })
       .pipe(
         tap(() => {
-          this.isLoggedIn = false;
+          this.isLoggedInSubject.next(false);
         })
       );
   }
 
   checkAuth(): Observable<boolean> {
-    if (this.isLoggedIn) {
-      return of(true);
-    } else {
-      return this.http
-        .get<{ authenticated: boolean; user?: any }>(
-          `${this.apiBaseUrl}/auth/status`,
-          { withCredentials: true }
-        )
-        .pipe(
-          map((response) => {
-            this.isLoggedIn = response.authenticated;
-            return response.authenticated;
-          })
-        );
-    }
+    return this.http
+      .get<{ authenticated: boolean; user?: any }>(
+        `${this.apiBaseUrl}/auth/status`,
+        { withCredentials: true }
+      )
+      .pipe(
+        map((response) => {
+          this.isLoggedInSubject.next(response.authenticated);
+          return response.authenticated;
+        })
+      );
   }
 
   isAuthenticated(): boolean {
-    return this.isLoggedIn;
+    return this.isLoggedInSubject.value;
   }
 }

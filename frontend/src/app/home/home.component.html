@@ -5,7 +5,17 @@
     mat-raised-button
     color="primary"
     (click)="navigateToProfiles()"
+    *ngIf="isLogIn$ | async"
   >
-    Profiles
+    Profiless
+  </button>
+  <button
+    class="preview"
+    mat-raised-button
+    color="primary"
+    (click)="navigateToLogin()"
+    *ngIf="!(isLogIn$ | async)"
+  >
+    Login
   </button>
 </div>

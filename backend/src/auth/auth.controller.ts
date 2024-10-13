@@ -5,8 +5,11 @@ import {
   Response,
   HttpStatus,
   Get,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +25,7 @@ export class AuthController {
         .json({ message: 'Invalid credentials' });
     }
     const jwt = await this.authService.login(user);
+
     res.cookie('jwt', jwt.access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -38,17 +42,13 @@ export class AuthController {
   }
 
   @Get('status')
-  async status(@Response() res) {
-    const token = res.req.cookies['jwt'];
-    if (!token) {
-      return res.status(HttpStatus.OK).json({ authenticated: false });
-    }
-    try {
-      const payload = await this.authService.verifyToken(token);
+  @UseGuards(AuthGuard('jwt'))
+  async status(@Req() req, @Response() res) {
+    if (req.user) {
       return res
         .status(HttpStatus.OK)
-        .json({ authenticated: true, user: payload });
-    } catch (error) {
+        .json({ authenticated: true, user: req.user });
+    } else {
       return res.status(HttpStatus.OK).json({ authenticated: false });
     }
   }

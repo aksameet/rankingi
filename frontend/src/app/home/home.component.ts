@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 export class HomeComponent {
   constructor(private router: Router) {}
 
-  navigateToDashboard() {
-    this.router.navigate(['/dashboard']);
+  navigateToProfiles() {
+    this.router.navigate(['/profiles']);
   }
 }

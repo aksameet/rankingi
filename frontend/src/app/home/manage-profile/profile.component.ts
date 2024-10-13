@@ -10,6 +10,7 @@ import { ExcelHelperService } from '../../services/excel-helper.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
 import { ExcelUploadComponent } from '../../components/excel-upload/excel-upload.component';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -34,7 +35,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private profileService: ProfileService,
     private excelHelperService: ExcelHelperService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -215,5 +217,9 @@ export class ProfileComponent implements OnInit {
     );
 
     this.saveMessage = 'Profiles have been downloaded successfully.';
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

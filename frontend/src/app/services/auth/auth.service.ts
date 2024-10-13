@@ -25,9 +25,14 @@ export class AuthService {
       );
   }
 
-  logout() {
-    this.isLoggedIn = false;
-    // Optionally, implement logout endpoint
+  logout(): Observable<any> {
+    return this.http
+      .post(`${this.apiBaseUrl}/auth/logout`, {}, { withCredentials: true })
+      .pipe(
+        tap(() => {
+          this.isLoggedIn = false;
+        })
+      );
   }
 
   checkAuth(): Observable<boolean> {

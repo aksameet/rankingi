@@ -24,11 +24,17 @@ export class AuthController {
     const jwt = await this.authService.login(user);
     res.cookie('jwt', jwt.access_token, {
       httpOnly: true,
-      secure: false, // Set to true in production with HTTPS
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'Lax',
       maxAge: 3600000, // 1 hour
     });
     return res.status(HttpStatus.OK).json({ message: 'Login successful' });
+  }
+
+  @Post('logout')
+  async logout(@Response() res) {
+    res.clearCookie('jwt');
+    return res.status(HttpStatus.OK).json({ message: 'Logout successful' });
   }
 
   @Get('status')

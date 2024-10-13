@@ -1,3 +1,4 @@
+import { Router, RouterModule } from '@angular/router';
 // src/app/profile/profile.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ProfileService, Profile } from '../../services/profile.service';
@@ -21,6 +22,7 @@ import { AuthService } from '../../services/auth/auth.service';
     MaterialModule,
     ProfileCardComponent,
     ExcelUploadComponent,
+    RouterModule,
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
@@ -36,7 +38,8 @@ export class ProfileComponent implements OnInit {
     private profileService: ProfileService,
     private excelHelperService: ExcelHelperService,
     private dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -219,6 +222,13 @@ export class ProfileComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout();
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['']);
+      },
+      error: (err) => {
+        console.error('Logout failed', err);
+      },
+    });
   }
 }

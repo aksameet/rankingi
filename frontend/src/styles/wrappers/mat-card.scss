@@ -1,0 +1,10 @@
+@mixin light {
+  .mat-mdc-card {
+    background-color: #f5f5f5;
+  }
+}
+@mixin dark {
+  .mat-mdc-card {
+    background-color: grey;
+  }
+}

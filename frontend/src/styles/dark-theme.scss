@@ -1,0 +1,7 @@
+@use "actions/buttons" as button;
+@use "wrappers/mat-card" as matCard;
+
+@mixin dark {
+  @include button.dark;
+  @include matCard.dark;
+}

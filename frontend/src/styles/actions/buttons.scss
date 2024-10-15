@@ -1,0 +1,10 @@
+@mixin light {
+  .mat-mdc-raised-button:not(:disabled) {
+    background-color: lightblue;
+  }
+}
+@mixin dark {
+  .mat-mdc-raised-button:not(:disabled) {
+    background-color: darkgreen;
+  }
+}

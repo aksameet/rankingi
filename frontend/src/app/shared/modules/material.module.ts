@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 // Add more imports as needed
 
 const materialModules = [
@@ -21,6 +22,7 @@ const materialModules = [
   MatSelectModule,
   MatDialogModule,
   MatDialogModule,
+  MatSlideToggleModule,
   // Add more modules here
 ];
 

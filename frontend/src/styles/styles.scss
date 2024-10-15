@@ -1,0 +1,31 @@
+@use "light-theme" as lightTheme;
+@use "dark-theme" as darkTheme;
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.light-theme {
+  @include lightTheme.light;
+}
+
+// Dark Theme Styles
+.dark-theme {
+  @include darkTheme.dark;
+}
+
+html,
+body {
+  height: 100%;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+app-root {
+  position: relative;
+}

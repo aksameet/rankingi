@@ -31,7 +31,7 @@ export class ProfileFormComponent implements OnInit {
   ) {
     this.profileForm = new FormGroup({
       name: new FormControl('', Validators.required),
-      email: new FormControl(''),
+      email: new FormControl('', Validators.email),
       rank: new FormControl(0),
       city: new FormControl('', Validators.required),
       image: new FormControl(null),

@@ -19,3 +19,36 @@
     Login
   </button>
 </div>
+
+<div>
+  <div class="flex items-start gap-5 mt-10">
+    <mat-form-field appearance="outline">
+      <mat-label>Type</mat-label>
+      <mat-select
+        [(value)]="selectedType"
+        (selectionChange)="onTypeChanged($event.value)"
+      >
+        <mat-option value="profiles">Profiles</mat-option>
+        <mat-option value="adwokaci">Adwokaci</mat-option>
+        <mat-option value="radcowie">Radcowie</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>City</mat-label>
+      <mat-select
+        [(value)]="selectedCity"
+        (selectionChange)="onCityChanged($event.value)"
+      >
+        <mat-option value="">Default</mat-option>
+        <mat-option value="warszawa">warszawa</mat-option>
+        <mat-option value="poznan">poznan</mat-option>
+        <mat-option value="wroclaw">wroclaw</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <app-profile-main
+    *ngFor="let profile of profiles"
+    [profile]="profile"
+  ></app-profile-main>
+</div>

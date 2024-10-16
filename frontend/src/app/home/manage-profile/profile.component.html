@@ -11,32 +11,34 @@
 >
 </app-excel-upload>
 
-<mat-form-field appearance="outline">
-  <mat-label>Type</mat-label>
-  <mat-select
-    [(value)]="selectedType"
-    (selectionChange)="onTypeChanged($event.value)"
-  >
-    <mat-option value="profiles">Profiles</mat-option>
-    <mat-option value="adwokaci">Adwokaci</mat-option>
-    <mat-option value="radcowie">Radcowie</mat-option>
-  </mat-select>
-</mat-form-field>
+<div class="flex items-start gap-5 mt-10">
+  <mat-form-field appearance="outline">
+    <mat-label>Type</mat-label>
+    <mat-select
+      [(value)]="selectedType"
+      (selectionChange)="onTypeChanged($event.value)"
+    >
+      <mat-option value="profiles">Profiles</mat-option>
+      <mat-option value="adwokaci">Adwokaci</mat-option>
+      <mat-option value="radcowie">Radcowie</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-<mat-form-field appearance="outline">
-  <mat-label>City</mat-label>
-  <mat-select
-    [(value)]="selectedCity"
-    (selectionChange)="onCityChanged($event.value)"
-  >
-    <mat-option value="">Default</mat-option>
-    <mat-option value="warszawa">warszawa</mat-option>
-    <mat-option value="poznan">poznan</mat-option>
-    <mat-option value="wroclaw">wroclaw</mat-option>
-  </mat-select>
-</mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>City</mat-label>
+    <mat-select
+      [(value)]="selectedCity"
+      (selectionChange)="onCityChanged($event.value)"
+    >
+      <mat-option value="">Default</mat-option>
+      <mat-option value="warszawa">warszawa</mat-option>
+      <mat-option value="poznan">poznan</mat-option>
+      <mat-option value="wroclaw">wroclaw</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
 
-<div class="action-buttons">
+<div class="flex items-start gap-2">
   <button mat-raised-button color="primary" (click)="openAddProfileDialog()">
     Add Profile
   </button>
@@ -55,12 +57,14 @@
 
 <div *ngIf="saveMessage" class="save-message">{{ saveMessage }}</div>
 
-<h2 class="title">Existing Profiles</h2>
-<div class="profile-wrapper">
-  <app-profile-card
-    *ngFor="let profile of profiles"
-    [profile]="profile"
-    (deleteProfile)="onDeleteProfile($event)"
-    (editProfile)="onEditProfile($event)"
-  ></app-profile-card>
+<div class="mt-8">
+  <h2 class="title mb-0">Existing Profiles</h2>
+  <div class="profile-wrapper">
+    <app-profile-card
+      *ngFor="let profile of profiles"
+      [profile]="profile"
+      (deleteProfile)="onDeleteProfile($event)"
+      (editProfile)="onEditProfile($event)"
+    ></app-profile-card>
+  </div>
 </div>

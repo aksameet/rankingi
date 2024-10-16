@@ -1,0 +1,21 @@
+@mixin light {
+  .mat-mdc-notch-piece.mdc-notched-outline__notch {
+    border-right: none;
+  }
+
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled)
+    .mat-mdc-notch-piece {
+    border-width: 2px;
+  }
+}
+@mixin dark {
+  .mat-mdc-notch-piece.mdc-notched-outline__notch {
+    border-right: none;
+  }
+
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled)
+    .mat-mdc-notch-piece {
+    border-width: 2px;
+    border-color: yellowgreen;
+  }
+}

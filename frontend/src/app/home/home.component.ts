@@ -3,22 +3,41 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
-import { ThemeToggleComponent } from '../components/theme-toggle/theme-toggle.component';
+import { Profile, ProfileService } from '../services/profile.service';
+import { BehaviorSubject } from 'rxjs';
+import { ProfileMainComponent } from './profile-main/profile-main.component';
+import { FormsModule } from '@angular/forms';
+import { MaterialModule } from '../shared/modules/material.module';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, RouterModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ProfileMainComponent,
+    FormsModule,
+    MaterialModule,
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
+  $loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  profiles: Profile[] = [];
+  selectedType: string = 'profiles';
+  selectedCity: string = '';
   isLogIn$!: any;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private profileService: ProfileService
+  ) {}
 
   ngOnInit(): void {
     this.isLogIn$ = this.authService.isLoggedIn$;
+    this.loadProfiles();
   }
 
   navigateToProfiles() {
@@ -27,5 +46,55 @@ export class HomeComponent {
 
   navigateToLogin() {
     this.router.navigate(['/login']);
+  }
+
+  loadProfiles() {
+    this.$loading.next(true);
+    this.profileService
+      .getProfiles(this.selectedType, this.selectedCity)
+      .subscribe(
+        (data) => {
+          this.$loading.next(false);
+          this.profiles = data;
+          this.sortProfiles();
+        },
+        (error) => {
+          this.$loading.next(false);
+          this.profiles = [];
+          console.error('Error loading profiles:', error);
+        }
+      );
+  }
+
+  sortProfiles() {
+    this.profiles.sort((a, b) => {
+      const rankA = a.rank;
+      const rankB = b.rank;
+
+      const isRankANull = rankA == null || rankA === 0;
+      const isRankBNull = rankB == null || rankB === 0;
+
+      if (isRankANull && isRankBNull) {
+        return 0;
+      }
+      if (isRankANull) {
+        return 1;
+      }
+      if (isRankBNull) {
+        return -1;
+      }
+      return rankA - rankB;
+    });
+  }
+
+  onTypeChanged(selectedType: string) {
+    this.profiles = [];
+    this.selectedType = selectedType;
+    this.loadProfiles();
+  }
+
+  onCityChanged(selectedCity: string) {
+    this.selectedCity = selectedCity;
+    this.loadProfiles();
   }
 }

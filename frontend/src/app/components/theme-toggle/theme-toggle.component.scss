@@ -1,4 +1,9 @@
 button {
   /* Optional: Add a box-shadow or other styles */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  &:hover {
+    filter: brightness(1.3);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  }
+  margin: 5px;
 }

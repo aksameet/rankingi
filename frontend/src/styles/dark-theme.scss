@@ -1,7 +1,9 @@
 @use "actions/buttons" as button;
+@use "forms/general" as general;
 @use "wrappers/mat-card" as matCard;
 
 @mixin dark {
   @include button.dark;
   @include matCard.dark;
+  @include general.dark;
 }

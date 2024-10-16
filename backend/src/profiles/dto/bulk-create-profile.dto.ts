@@ -48,6 +48,10 @@ export class CreateProfileDto {
   @IsOptional()
   stars?: number;
 
+  @IsNumber()
+  @IsOptional()
+  opinions?: number;
+
   @IsString()
   @IsOptional()
   website?: string;

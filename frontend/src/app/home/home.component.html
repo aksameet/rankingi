@@ -20,8 +20,8 @@
   </button>
 </div>
 
-<div>
-  <div class="flex items-start gap-5 mt-10">
+<div class="flex flex-wrap items-start w-full justify-center px-2 mb-3">
+  <div class="flex items-start gap-5 mt-10 max-w-[1200px] w-full">
     <mat-form-field appearance="outline">
       <mat-label>Type</mat-label>
       <mat-select
@@ -48,6 +48,7 @@
     </mat-form-field>
   </div>
   <app-profile-main
+    class="max-w-[1200px] w-full mt-2"
     *ngFor="let profile of profiles"
     [profile]="profile"
   ></app-profile-main>

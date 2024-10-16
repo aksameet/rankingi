@@ -45,6 +45,9 @@ export class Profile {
   stars?: number;
 
   @Prop()
+  opinions?: number;
+
+  @Prop()
   website?: string;
 
   @Prop({ required: true, index: true })

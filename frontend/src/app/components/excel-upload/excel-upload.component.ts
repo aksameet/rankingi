@@ -130,6 +130,7 @@ export class ExcelUploadComponent implements OnChanges {
       specialization: item.specialization,
       geolocation: item.geolocation,
       stars: Number(item.stars),
+      opinions: Number(item.opinions),
       website: item.website,
       city: item.city,
     }));

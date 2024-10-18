@@ -1,7 +1,7 @@
-<div class="home">
-  <h1>Dashboard</h1>
+<div class="relative m-2">
+  <h1 class="mb-0">Dashboard</h1>
   <button
-    class="preview"
+    class="absolute top-0 right-0"
     mat-raised-button
     color="primary"
     (click)="navigateToProfiles()"
@@ -10,7 +10,7 @@
     Profiless
   </button>
   <button
-    class="preview"
+    class="!absolute top-0 right-0"
     mat-raised-button
     color="primary"
     (click)="navigateToLogin()"
@@ -21,7 +21,7 @@
 </div>
 
 <div class="flex flex-wrap items-start w-full justify-center px-2 mb-3">
-  <div class="flex items-start gap-5 mt-10 max-w-[1200px] w-full">
+  <div class="flex items-start gap-3 mt-2 max-w-[1200px] w-full">
     <mat-form-field appearance="outline">
       <mat-label>Type</mat-label>
       <mat-select
@@ -47,6 +47,7 @@
       </mat-select>
     </mat-form-field>
   </div>
+  <h1 *ngIf="profiles">Nothing to see from server</h1>
   <app-profile-main
     class="max-w-[1200px] w-full mt-2"
     *ngFor="let profile of profiles"

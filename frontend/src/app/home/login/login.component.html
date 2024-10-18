@@ -1,8 +1,8 @@
-<div class="login-container">
-  <mat-card>
-    <mat-card-title>Login</mat-card-title>
+<div class="m-4">
+  <mat-card class="flex p-4">
+    <mat-card-title class="mb-3">Login</mat-card-title>
     <mat-card-content>
-      <form (submit)="login(); $event.preventDefault()">
+      <form (submit)="login(); $event.preventDefault()" class="flex gap-2">
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Username</mat-label>
           <input matInput [(ngModel)]="username" name="username" required />

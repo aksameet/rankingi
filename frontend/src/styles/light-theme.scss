@@ -1,9 +1,0 @@
-@use "actions/buttons" as button;
-@use "wrappers/mat-card" as matCard;
-@use "forms/general" as general;
-
-@mixin light {
-  @include button.light;
-  @include matCard.light;
-  @include general.light;
-}

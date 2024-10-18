@@ -52,6 +52,9 @@ export class Profile {
 
   @Prop({ required: true, index: true })
   city!: string;
+
+  @Prop()
+  company?: string;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);

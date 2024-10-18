@@ -1,3 +1,7 @@
+@use "mat-select" as matSelect;
+@use "mat-input" as matInput;
+@import "../palettes";
+
 @mixin light {
   .mat-mdc-notch-piece.mdc-notched-outline__notch {
     border-right: none;
@@ -7,7 +11,11 @@
     .mat-mdc-notch-piece {
     border-width: 2px;
   }
+
+  @include matSelect.light;
+  @include matInput.light;
 }
+
 @mixin dark {
   .mat-mdc-notch-piece.mdc-notched-outline__notch {
     border-right: none;
@@ -16,6 +24,9 @@
   .mdc-text-field--outlined:not(.mdc-text-field--disabled)
     .mat-mdc-notch-piece {
     border-width: 2px;
-    border-color: yellowgreen;
+    border-color: $dark-white;
   }
+
+  @include matSelect.dark;
+  @include matInput.dark;
 }

@@ -38,6 +38,8 @@
   </mat-form-field>
 </div>
 
+<h1 *ngIf="profiles">Nothing from server</h1>
+
 <div class="flex items-start gap-2">
   <button mat-raised-button color="primary" (click)="openAddProfileDialog()">
     Add Profile

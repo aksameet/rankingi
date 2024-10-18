@@ -35,6 +35,7 @@ export class ProfileFormComponent implements OnInit {
       rank: new FormControl(0),
       city: new FormControl('', Validators.required),
       image: new FormControl(null),
+      company: new FormControl(null),
     });
     if (data && data.profile) {
       this.editingProfileId = data.profile.id || null;
@@ -44,6 +45,7 @@ export class ProfileFormComponent implements OnInit {
         rank: data.profile.rank,
         city: data.profile.city,
         image: data.profile.image,
+        company: data.profile.company,
       });
       if (data.profile.image) {
         this.selectedImage = 'data:image/jpeg;base64,' + data.profile.image;

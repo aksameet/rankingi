@@ -7,3 +7,9 @@
   @include matCard.dark;
   @include general.dark;
 }
+
+@mixin light {
+  @include button.light;
+  @include matCard.light;
+  @include general.light;
+}

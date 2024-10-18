@@ -58,6 +58,9 @@ export class CreateProfileDto {
 
   @IsString()
   city!: string;
+
+  @IsString()
+  company!: string;
 }
 
 export class BulkCreateProfileDto {

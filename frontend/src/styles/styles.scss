@@ -1,18 +1,22 @@
-@use "light-theme" as lightTheme;
-@use "dark-theme" as darkTheme;
+@use "themes" as themes;
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
+@import "palettes";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 .light-theme {
-  @include lightTheme.light;
+  @include themes.light;
+  background-color: $light-1;
+  color: $light-white;
 }
 
 // Dark Theme Styles
 .dark-theme {
-  @include darkTheme.dark;
+  @include themes.dark;
+  background-color: $dark-1;
+  color: $dark-white;
 }
 
 html,

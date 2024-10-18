@@ -61,7 +61,6 @@ export class HomeComponent {
         (error) => {
           this.$loading.next(false);
           this.profiles = [];
-          console.error('Error loading profiles:', error);
         }
       );
   }

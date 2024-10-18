@@ -18,6 +18,7 @@ export interface Profile {
   opinions?: number;
   website?: string;
   city: string;
+  company?: string;
 }
 
 @Injectable({

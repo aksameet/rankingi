@@ -1,10 +1,12 @@
+@import "../palettes";
+
 @mixin light {
   .mat-mdc-card {
-    background-color: #f5f5f5;
+    background-color: $light-2;
   }
 }
 @mixin dark {
   .mat-mdc-card {
-    background-color: grey;
+    background-color: $dark-2;
   }
 }

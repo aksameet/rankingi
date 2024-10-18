@@ -36,6 +36,7 @@ export class ExcelHelperService {
       { header: 'opinions', key: 'opinions', width: 6 },
       { header: 'website', key: 'website', width: 20 },
       { header: 'city', key: 'city', width: 15 },
+      { header: 'company', key: 'company', width: 25 },
     ];
 
     profiles.forEach((profile) => {
@@ -53,6 +54,7 @@ export class ExcelHelperService {
           profile.opinions !== undefined ? Number(profile.opinions) : '',
         website: profile.website || '',
         city: profile.city || '',
+        company: profile.company || '',
       });
     });
 

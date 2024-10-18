@@ -1,0 +1,7 @@
+@use "../themes" as themes;
+
+@mixin cards($theme) {
+  .mat-mdc-card {
+    background-color: themes.theme-color($theme, secondary);
+  }
+}

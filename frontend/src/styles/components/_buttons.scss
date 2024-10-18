@@ -1,0 +1,7 @@
+@use "../themes" as themes;
+
+@mixin buttons($theme) {
+  .mat-mdc-raised-button:not(:disabled) {
+    background-color: themes.theme-color($theme, accent);
+  }
+}

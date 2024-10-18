@@ -1,22 +1,34 @@
 @use "themes" as themes;
+@use "components" as components;
+
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
-@import "palettes";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-.light-theme {
-  @include themes.light;
-  background-color: $light-1;
-  color: $light-white;
+.light-theme,
+.light-theme body {
+  background-color: themes.theme-color(light, background);
+  color: themes.theme-color(light, white);
 }
 
-// Dark Theme Styles
+.light-theme {
+  @include components.buttons(light);
+  @include components.cards(light);
+  @include components.forms(light);
+}
+
+.dark-theme,
+.dark-theme body {
+  background-color: themes.theme-color(dark, background);
+  color: themes.theme-color(dark, white);
+}
+
 .dark-theme {
-  @include themes.dark;
-  background-color: $dark-1;
-  color: $dark-white;
+  @include components.buttons(dark);
+  @include components.cards(dark);
+  @include components.forms(dark);
 }
 
 html,
@@ -24,6 +36,7 @@ body {
   height: 100%;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;

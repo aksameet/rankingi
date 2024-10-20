@@ -64,7 +64,7 @@
         mat-raised-button
         color="warn"
         (click)="clearData()"
-        [disabled]="isLoading || isSaving"
+        [disabled]="isLoading || isSaving || jsonData.length === 0"
         class="clear-button"
       >
         Clear

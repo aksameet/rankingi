@@ -49,6 +49,11 @@ export class BaseProfilesController {
     return this.profilesService.findAll(this.collectionName);
   }
 
+  @Get('companies')
+  async findAllGroupedByCompany(): Promise<any> {
+    return this.profilesService.findAllGroupedByCompany(this.collectionName);
+  }
+
   @Get('city/:cityName')
   async findAllByCity(
     @Param('cityName') cityName: string,

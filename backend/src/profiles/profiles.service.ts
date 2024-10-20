@@ -74,6 +74,20 @@ export class ProfilesService {
     return model.find().exec();
   }
 
+  async findAllGroupedByCompany(collectionName: string): Promise<any> {
+    const model = this.getModel(collectionName);
+    return model
+      .aggregate([
+        {
+          $group: {
+            _id: { $ifNull: ['$company', 'No Company'] },
+            profiles: { $push: '$$ROOT' },
+          },
+        },
+      ])
+      .exec();
+  }
+
   async findAllByCity(
     collectionName: string,
     city: string,

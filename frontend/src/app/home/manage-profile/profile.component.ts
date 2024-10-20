@@ -220,6 +220,19 @@ export class ProfileComponent implements OnInit {
     this.saveMessage = 'Profiles have been downloaded successfully.';
   }
 
+  logGouppedByCompany(): void {
+    this.profileService
+      .getProfilesGroupedByCompany(this.selectedType)
+      .subscribe(
+        (data) => {
+          console.log('Profiles grouped by company:', data);
+        },
+        (error) => {
+          console.error('Error fetching grouped profiles:', error);
+        }
+      );
+  }
+
   logout() {
     this.authService.logout().subscribe({
       next: () => {

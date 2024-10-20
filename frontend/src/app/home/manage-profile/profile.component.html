@@ -55,6 +55,10 @@
   <button mat-raised-button color="primary" (click)="downloadProfilesAsExcel()">
     Export Profiles to Excel
   </button>
+
+  <button mat-raised-button color="primary" (click)="logGouppedByCompany()">
+    Log profiles groupped by Company
+  </button>
 </div>
 
 <div *ngIf="saveMessage" class="save-message">{{ saveMessage }}</div>

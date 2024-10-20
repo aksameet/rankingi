@@ -29,7 +29,7 @@ export class AuthController {
     res.cookie('jwt', jwt.access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'None',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
       maxAge: 3600000, // 1 hour
     });
     return res.status(HttpStatus.OK).json({ message: 'Login successful' });

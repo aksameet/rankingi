@@ -1,3 +1,4 @@
+// src/app/profile.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -25,8 +26,8 @@ export interface Profile {
   providedIn: 'root',
 })
 export class ProfileService {
-  // private apiBaseUrl = 'http://localhost:3000';
-  private apiBaseUrl = 'https://api-jfyc2o6rla-uc.a.run.app';
+  private apiBaseUrl = 'http://localhost:3000';
+  // private apiBaseUrl = 'https://api-jfyc2o6rla-uc.a.run.app';
 
   constructor(private http: HttpClient) {}
 
@@ -36,6 +37,11 @@ export class ProfileService {
       apiUrl += `/city/${city}`;
     }
     return this.http.get<Profile[]>(apiUrl);
+  }
+
+  getProfilesGroupedByCompany(type: string): Observable<any> {
+    const apiUrl = `${this.apiBaseUrl}/${type}/companies`;
+    return this.http.get<any>(apiUrl);
   }
 
   createProfile(profile: Profile, type: string): Observable<Profile> {

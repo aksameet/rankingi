@@ -13,10 +13,10 @@ exports.CreateProfileDto = void 0;
 const class_validator_1 = require("class-validator");
 class CreateProfileDto {
 }
+exports.CreateProfileDto = CreateProfileDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.Length)(1, 100),
     __metadata("design:type", String)
 ], CreateProfileDto.prototype, "name", void 0);
-exports.CreateProfileDto = CreateProfileDto;
 //# sourceMappingURL=create-profile.dto.js.map

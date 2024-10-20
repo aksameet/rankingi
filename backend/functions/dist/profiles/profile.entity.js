@@ -13,6 +13,7 @@ exports.Profile = void 0;
 const typeorm_1 = require("typeorm");
 let Profile = class Profile {
 };
+exports.Profile = Profile;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
@@ -29,8 +30,16 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Profile.prototype, "email", void 0);
-Profile = __decorate([
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Profile.prototype, "description", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Index)(),
+    __metadata("design:type", String)
+], Profile.prototype, "city", void 0);
+exports.Profile = Profile = __decorate([
     (0, typeorm_1.Entity)()
 ], Profile);
-exports.Profile = Profile;
 //# sourceMappingURL=profile.entity.js.map

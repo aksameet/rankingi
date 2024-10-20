@@ -13,25 +13,65 @@ exports.ProfileSchema = exports.Profile = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 let Profile = class Profile {
 };
+exports.Profile = Profile;
 __decorate([
     (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
 ], Profile.prototype, "name", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: false }),
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Profile.prototype, "address", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Profile.prototype, "telephone", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true, unique: true }),
     __metadata("design:type", String)
 ], Profile.prototype, "email", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: false }),
+    (0, mongoose_1.Prop)(),
     __metadata("design:type", Number)
 ], Profile.prototype, "rank", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: false }),
+    (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Profile.prototype, "image", void 0);
-Profile = __decorate([
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Profile.prototype, "description", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Profile.prototype, "specialization", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Profile.prototype, "geolocation", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", Number)
+], Profile.prototype, "stars", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", Number)
+], Profile.prototype, "opinions", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Profile.prototype, "website", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true, index: true }),
+    __metadata("design:type", String)
+], Profile.prototype, "city", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Profile.prototype, "company", void 0);
+exports.Profile = Profile = __decorate([
     (0, mongoose_1.Schema)({
-        collection: 'Profiles',
         toJSON: {
             virtuals: true,
             versionKey: false,
@@ -42,6 +82,5 @@ Profile = __decorate([
         },
     })
 ], Profile);
-exports.Profile = Profile;
 exports.ProfileSchema = mongoose_1.SchemaFactory.createForClass(Profile);
 //# sourceMappingURL=profile.schema.js.map

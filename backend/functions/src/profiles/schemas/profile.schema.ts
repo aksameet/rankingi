@@ -4,13 +4,12 @@ import { Document } from 'mongoose';
 export type ProfileDocument = Profile & Document;
 
 @Schema({
-  collection: 'Profiles',
   toJSON: {
     virtuals: true,
     versionKey: false,
     transform: (doc, ret) => {
-      ret.id = ret._id; // Map _id to id
-      delete ret._id; // Remove _id
+      ret.id = ret._id;
+      delete ret._id;
     },
   },
 })
@@ -18,15 +17,44 @@ export class Profile {
   @Prop({ required: true })
   name!: string;
 
-  @Prop({ required: false })
-  email!: string;
+  @Prop()
+  address?: string;
 
-  @Prop({ required: false })
-  rank!: number;
+  @Prop()
+  telephone?: string;
 
-  @Prop({ required: false })
-  image!: string;
-  // Add additional fields as needed
+  @Prop({ required: true, unique: true })
+  email?: string;
+
+  @Prop()
+  rank?: number;
+
+  @Prop()
+  image?: string;
+
+  @Prop()
+  description?: string;
+
+  @Prop()
+  specialization?: string;
+
+  @Prop()
+  geolocation?: string;
+
+  @Prop()
+  stars?: number;
+
+  @Prop()
+  opinions?: number;
+
+  @Prop()
+  website?: string;
+
+  @Prop({ required: true, index: true })
+  city!: string;
+
+  @Prop()
+  company?: string;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);

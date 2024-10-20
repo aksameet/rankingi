@@ -3,4 +3,6 @@ export declare class Profile {
     name: string;
     rank: number;
     email: string;
+    description: string;
+    city: string;
 }

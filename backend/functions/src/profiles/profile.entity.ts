@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
 @Entity()
 export class Profile {
@@ -13,4 +13,11 @@ export class Profile {
 
   @Column()
   email!: string;
+
+  @Column()
+  description!: string;
+
+  @Column()
+  @Index()
+  city!: string;
 }

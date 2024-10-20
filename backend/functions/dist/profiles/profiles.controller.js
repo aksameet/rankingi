@@ -36,6 +36,7 @@ let ProfilesController = class ProfilesController {
         return this.profilesService.remove(id);
     }
 };
+exports.ProfilesController = ProfilesController;
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
@@ -71,9 +72,8 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ProfilesController.prototype, "remove", null);
-ProfilesController = __decorate([
+exports.ProfilesController = ProfilesController = __decorate([
     (0, common_1.Controller)('profiles'),
     __metadata("design:paramtypes", [profiles_service_1.ProfilesService])
 ], ProfilesController);
-exports.ProfilesController = ProfilesController;
 //# sourceMappingURL=profiles.controller.js.map

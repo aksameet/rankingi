@@ -10,18 +10,17 @@ exports.ProfilesModule = void 0;
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const profiles_service_1 = require("./profiles.service");
-const profiles_controller_1 = require("./profiles.controller");
-const profile_schema_1 = require("./schemas/profile.schema");
+const profiles_controller_1 = require("./controllers/profiles.controller");
+const adwokaci_controller_1 = require("./controllers/adwokaci.controller");
+const radcowie_controller_1 = require("./controllers/radcowie.controller");
 let ProfilesModule = class ProfilesModule {
 };
-ProfilesModule = __decorate([
+exports.ProfilesModule = ProfilesModule;
+exports.ProfilesModule = ProfilesModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            mongoose_1.MongooseModule.forFeature([{ name: profile_schema_1.Profile.name, schema: profile_schema_1.ProfileSchema }]),
-        ],
+        imports: [mongoose_1.MongooseModule],
         providers: [profiles_service_1.ProfilesService],
-        controllers: [profiles_controller_1.ProfilesController],
+        controllers: [profiles_controller_1.ProfilesController, adwokaci_controller_1.AdwokaciController, radcowie_controller_1.RadcowieController],
     })
 ], ProfilesModule);
-exports.ProfilesModule = ProfilesModule;
 //# sourceMappingURL=profiles.module.js.map

@@ -1,11 +1,18 @@
-import { Module } from '@nestjs/common';
+import {
+  Module,
+  NestModule,
+  MiddlewareConsumer,
+  RequestMethod,
+} from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProfilesModule } from './profiles/profiles.module';
 import * as dotenv from 'dotenv';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthMiddleware } from './auth/auth.middleware';
+import { AuthModule } from './auth/auth.module';
 
 dotenv.config();
-console.log('MongoDB URI:', process.env.MONGODB_URI);
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,6 +26,7 @@ console.log('MongoDB URI:', process.env.MONGODB_URI);
       inject: [ConfigService],
     }),
     ProfilesModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

@@ -33,7 +33,7 @@ export class ExcelHelperService {
       { header: 'specialization', key: 'specialization', width: 20 },
       { header: 'geolocation', key: 'geolocation', width: 20 },
       { header: 'stars', key: 'stars', width: 6 },
-      { header: 'opinions', key: 'opinions', width: 6 },
+      { header: 'opinions', key: 'opinions', width: 8 },
       { header: 'website', key: 'website', width: 20 },
       { header: 'city', key: 'city', width: 15 },
       { header: 'company', key: 'company', width: 25 },

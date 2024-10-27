@@ -50,17 +50,17 @@ export class ProfileComponent implements OnInit {
     this.$loading.next(true);
     this.profileService
       .getProfiles(this.selectedType, this.selectedCity)
-      .subscribe(
-        (data) => {
+      .subscribe({
+        next: (data) => {
           this.$loading.next(false);
           this.profiles = data;
           this.sortProfiles();
         },
-        (error) => {
+        error: (error) => {
           this.$loading.next(false);
           this.profiles = [];
-        }
-      );
+        },
+      });
   }
 
   sortProfiles() {
@@ -111,17 +111,19 @@ export class ProfileComponent implements OnInit {
 
   addProfile(profileData: Profile) {
     this.$loading.next(true);
-    this.profileService.createProfile(profileData, this.selectedType).subscribe(
-      (createdProfile) => {
-        this.$loading.next(false);
-        this.profiles.push(createdProfile);
-        this.sortProfiles();
-      },
-      (error) => {
-        this.$loading.next(false);
-        console.error('Error creating profile:', error);
-      }
-    );
+    this.profileService
+      .createProfile(profileData, this.selectedType)
+      .subscribe({
+        next: (createdProfile) => {
+          this.$loading.next(false);
+          this.profiles.push(createdProfile);
+          this.sortProfiles();
+        },
+        error: (error) => {
+          this.$loading.next(false);
+          console.error('Error creating profile:', error);
+        },
+      });
   }
 
   onEditProfile(profile: Profile) {
@@ -144,22 +146,24 @@ export class ProfileComponent implements OnInit {
 
   updateProfile(profileData: Profile) {
     this.$loading.next(true);
-    this.profileService.updateProfile(profileData, this.selectedType).subscribe(
-      (updatedProfile) => {
-        this.$loading.next(false);
-        const index = this.profiles.findIndex(
-          (p) => p.id === updatedProfile.id
-        );
-        if (index !== -1) {
-          this.profiles[index] = updatedProfile;
-        }
-        this.sortProfiles();
-      },
-      (error) => {
-        this.$loading.next(false);
-        console.error('Error updating profile:', error);
-      }
-    );
+    this.profileService
+      .updateProfile(profileData, this.selectedType)
+      .subscribe({
+        next: (updatedProfile) => {
+          this.$loading.next(false);
+          const index = this.profiles.findIndex(
+            (p) => p.id === updatedProfile.id
+          );
+          if (index !== -1) {
+            this.profiles[index] = updatedProfile;
+          }
+          this.sortProfiles();
+        },
+        error: (error) => {
+          this.$loading.next(false);
+          console.error('Error updating profile:', error);
+        },
+      });
   }
 
   onDeleteProfile(id: string) {
@@ -168,17 +172,17 @@ export class ProfileComponent implements OnInit {
 
   deleteProfile(id: string) {
     this.$loading.next(true);
-    this.profileService.deleteProfile(id, this.selectedType).subscribe(
-      () => {
+    this.profileService.deleteProfile(id, this.selectedType).subscribe({
+      next: () => {
         this.$loading.next(false);
         this.profiles = this.profiles.filter((profile) => profile?.id !== id);
         this.sortProfiles();
       },
-      (error) => {
+      error: (error) => {
         this.$loading.next(false);
         console.error('Error deleting profile:', error);
-      }
-    );
+      },
+    });
   }
 
   onBulkUploadComplete(): void {
@@ -223,14 +227,14 @@ export class ProfileComponent implements OnInit {
   logGouppedByCompany(): void {
     this.profileService
       .getProfilesGroupedByCompany(this.selectedType)
-      .subscribe(
-        (data) => {
+      .subscribe({
+        next: (data) => {
           console.log('Profiles grouped by company:', data);
         },
-        (error) => {
+        error: (error) => {
           console.error('Error fetching grouped profiles:', error);
-        }
-      );
+        },
+      });
   }
 
   logout() {

@@ -52,17 +52,17 @@ export class HomeComponent {
     this.$loading.next(true);
     this.profileService
       .getProfiles(this.selectedType, this.selectedCity)
-      .subscribe(
-        (data) => {
+      .subscribe({
+        next: (data) => {
           this.$loading.next(false);
           this.profiles = data;
           this.sortProfiles();
         },
-        (error) => {
+        error: (error) => {
           this.$loading.next(false);
           this.profiles = [];
-        }
-      );
+        },
+      });
   }
 
   sortProfiles() {

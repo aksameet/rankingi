@@ -57,6 +57,7 @@ export class HomeComponent {
           this.$loading.next(false);
           this.profiles = data;
           this.sortProfiles();
+          console.log('Load Data =>', data);
         },
         error: (error) => {
           this.$loading.next(false);

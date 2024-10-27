@@ -3,5 +3,8 @@
 @mixin buttons($theme) {
   .mat-mdc-raised-button:not(:disabled) {
     background-color: themes.theme-color($theme, accent);
+    &:hover {
+      background-color: rgba(themes.theme-color($theme, accent), 0.4);
+    }
   }
 }

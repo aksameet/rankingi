@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
@@ -27,7 +28,6 @@ export class HomeComponent {
   selectedType: string = 'profiles';
   selectedCity: string = '';
   isLogIn$!: any;
-  expandedProfileId: string | null = null;
 
   constructor(
     private router: Router,
@@ -96,13 +96,5 @@ export class HomeComponent {
   onCityChanged(selectedCity: string) {
     this.selectedCity = selectedCity;
     this.loadProfiles();
-  }
-
-  onProfileClick(profileId: string | undefined) {
-    if (profileId === undefined) {
-      return;
-    }
-    this.expandedProfileId =
-      this.expandedProfileId === profileId ? null : profileId;
   }
 }

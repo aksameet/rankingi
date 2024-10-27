@@ -5,12 +5,25 @@
     cursor: pointer;
     background-color: themes.theme-color($theme, secondary);
     transition: background-color 0.1s ease-in-out;
-    border: 1px solid transparent;
+    border-radius: 8px;
+
+    .mat-mdc-card-header {
+      mat-card-title {
+        margin-bottom: 10px;
+      }
+      mat-card-subtitle {
+        color: themes.theme-color($theme, text);
+      }
+    }
+
+    .expanded-main,
+    .expanded-side {
+      background-color: rgba(themes.theme-color($theme, accent), 0.2);
+    }
 
     &:hover,
     &.expanded {
       background-color: rgba(themes.theme-color($theme, secondary), 0.7);
-      border: 1px solid #fff;
     }
   }
 }

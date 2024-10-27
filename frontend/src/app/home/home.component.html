@@ -52,7 +52,5 @@
     class="max-w-[1200px] w-full mt-1"
     *ngFor="let profile of profiles"
     [profile]="profile"
-    [expanded]="profile.id === expandedProfileId"
-    (cardClick)="onProfileClick(profile.id)"
   ></app-profile-main>
 </div>

@@ -7,7 +7,7 @@
     (click)="navigateToProfiles()"
     *ngIf="isLogIn$ | async"
   >
-    Profiless
+    Profiles
   </button>
   <button
     class="!absolute top-0 right-0"
@@ -41,9 +41,9 @@
         (selectionChange)="onCityChanged($event.value)"
       >
         <mat-option value="">Default</mat-option>
-        <mat-option value="warszawa">warszawa</mat-option>
-        <mat-option value="poznan">poznan</mat-option>
-        <mat-option value="wroclaw">wroclaw</mat-option>
+        <mat-option value="warszawa">Warszawa</mat-option>
+        <mat-option value="poznan">Poznań</mat-option>
+        <mat-option value="wroclaw">Wrocław</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
@@ -52,5 +52,7 @@
     class="max-w-[1200px] w-full mt-1"
     *ngFor="let profile of profiles"
     [profile]="profile"
+    [expanded]="profile.id === expandedProfileId"
+    (cardClick)="onProfileClick(profile.id)"
   ></app-profile-main>
 </div>

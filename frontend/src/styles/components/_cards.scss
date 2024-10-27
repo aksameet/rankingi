@@ -6,8 +6,10 @@
     background-color: themes.theme-color($theme, secondary);
     transition: background-color 0.1s ease-in-out;
     border: 1px solid transparent;
-    &:hover {
-      background-color: rgba(themes.theme-color($theme, secondary), 0.3);
+
+    &:hover,
+    &.expanded {
+      background-color: rgba(themes.theme-color($theme, secondary), 0.7);
       border: 1px solid #fff;
     }
   }

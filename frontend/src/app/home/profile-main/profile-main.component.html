@@ -1,5 +1,8 @@
-<!-- profile-card.component.html -->
-<mat-card class="profile-card">
+<mat-card
+  class="profile-card"
+  [class.expanded]="expanded"
+  (click)="cardClick.emit()"
+>
   <div *ngIf="profile.rank" class="rank">{{ profile.rank }}</div>
   <mat-card-header>
     <div mat-card-avatar class="profile-avatar">
@@ -27,4 +30,11 @@
       <p>{{ profile.website }}</p>
     </div>
   </mat-card-content>
+  <div
+    [@expandCollapse]="expanded ? 'expanded' : 'collapsed'"
+    class="expanded-content"
+  >
+    <!-- Additional data displayed when expanded -->
+    <p>More details about {{ profile.name }}</p>
+  </div>
 </mat-card>

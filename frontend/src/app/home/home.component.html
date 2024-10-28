@@ -1,23 +1,25 @@
-<div class="relative m-2">
-  <h1 class="mb-0">Dashboard</h1>
-  <button
-    class="absolute top-0 right-0"
-    mat-raised-button
-    color="primary"
-    (click)="navigateToProfiles()"
-    *ngIf="isLogIn$ | async"
-  >
-    Profiles
-  </button>
-  <button
-    class="!absolute top-0 right-0"
-    mat-raised-button
-    color="primary"
-    (click)="navigateToLogin()"
-    *ngIf="!(isLogIn$ | async)"
-  >
-    Login
-  </button>
+<div class="flex flex-wrap items-start w-full justify-center">
+  <div class="relative m-2 max-w-[1200px] w-full">
+    <h1 class="mb-0">Dashboard</h1>
+    <button
+      class="absolute top-0 right-0"
+      mat-raised-button
+      color="primary"
+      (click)="navigateToProfiles()"
+      *ngIf="isLogIn$ | async"
+    >
+      Profiles
+    </button>
+    <button
+      class="!absolute top-0 right-0"
+      mat-raised-button
+      color="primary"
+      (click)="navigateToLogin()"
+      *ngIf="!(isLogIn$ | async)"
+    >
+      Login
+    </button>
+  </div>
 </div>
 
 <div class="flex flex-wrap items-start w-full justify-center px-4 mb-3">

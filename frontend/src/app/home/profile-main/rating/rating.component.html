@@ -1,0 +1,20 @@
+<!-- rating.component.html -->
+<div class="rating">
+  <!-- Full Stars -->
+  <ng-container *ngFor="let star of fullStars">
+    <mat-icon class="star-icon">star</mat-icon>
+  </ng-container>
+
+  <!-- Half Star -->
+  <ng-container *ngIf="halfStar">
+    <mat-icon class="star-icon">star_half</mat-icon>
+  </ng-container>
+
+  <!-- Empty Stars -->
+  <ng-container *ngFor="let star of emptyStars">
+    <mat-icon class="star-icon">star_border</mat-icon>
+  </ng-container>
+
+  <!-- Opinions -->
+  <span *ngIf="opinions" class="opinions">({{ opinions }})</span>
+</div>

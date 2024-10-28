@@ -10,7 +10,7 @@
 .light-theme,
 .light-theme body {
   background-color: themes.theme-color(light, background);
-  color: themes.theme-color(light, white);
+  color: themes.theme-color(light, input-text);
 }
 
 .light-theme {

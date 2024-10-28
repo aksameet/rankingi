@@ -17,6 +17,10 @@
     <mat-card-subtitle>
       <p>{{ profile.email }}</p>
       <p>{{ profile.website }}</p>
+      <app-rating
+        [rating]="profile.stars"
+        [opinions]="profile.opinions"
+      ></app-rating>
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
@@ -28,6 +32,14 @@
       <b>Firma:</b>
       <p>{{ profile.company }}</p>
     </div>
+    <div *ngIf="profile.telephone">
+      <b>Telefon:</b>
+      <p>{{ profile.telephone }}</p>
+    </div>
+    <div *ngIf="profile.specialization">
+      <b>Specjalizacje:</b>
+      <p>{{ profile.specialization }}</p>
+    </div>
   </mat-card-content>
   <div
     [@slideToggle]="expanded ? 'expanded' : 'collapsed'"
@@ -35,10 +47,9 @@
   >
     <div class="expanded-main">
       <p>
-        <b>Więcej informacji o {{ profile.name }}</b>
+        <b>Dodatkowe informacje o {{ profile.name }}</b>
       </p>
       <div *ngIf="profile.description">
-        <b>Bio:</b>
         <p>{{ profile.description }}</p>
       </div>
     </div>

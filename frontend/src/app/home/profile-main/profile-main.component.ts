@@ -9,11 +9,12 @@ import {
   transition,
   animate,
 } from '@angular/animations';
+import { RatingComponent } from './rating/rating.component';
 
 @Component({
   selector: 'app-profile-main',
   standalone: true,
-  imports: [CommonModule, MaterialModule],
+  imports: [CommonModule, MaterialModule, RatingComponent],
   templateUrl: './profile-main.component.html',
   styleUrls: ['./profile-main.component.scss'],
   animations: [

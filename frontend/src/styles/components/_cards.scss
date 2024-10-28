@@ -3,7 +3,7 @@
 @mixin cards($theme) {
   .mat-mdc-card {
     cursor: pointer;
-    background-color: themes.theme-color($theme, secondary);
+    background-color: themes.theme-color($theme, primary);
     transition: background-color 0.1s ease-in-out;
     border-radius: 8px;
 
@@ -18,7 +18,7 @@
 
     .expanded-main,
     .expanded-side {
-      background-color: rgba(themes.theme-color($theme, accent), 0.2);
+      background-color: rgba(themes.theme-color($theme, secondary), 0.7);
     }
 
     &:hover,

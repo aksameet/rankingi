@@ -16,7 +16,14 @@
     <mat-card-title>{{ profile.name }}</mat-card-title>
     <mat-card-subtitle>
       <p>{{ profile.email }}</p>
-      <p>{{ profile.website }}</p>
+      <p class="website">
+        <a
+          [attr.href]="'https://' + profile.website"
+          target="_blank"
+          rel="noopener noreferrer"
+          >{{ profile.website }}</a
+        >
+      </p>
       <app-rating
         [rating]="profile.stars"
         [opinions]="profile.opinions"

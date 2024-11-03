@@ -54,6 +54,13 @@
         font-size: 100px;
       }
     }
+
+    .website {
+      cursor: pointer;
+      &:hover {
+        opacity: 0.6;
+      }
+    }
   }
 
   .mat-mdc-card-content {
@@ -81,7 +88,7 @@
     flex-direction: row;
 
     .expanded-main {
-      width: calc(100% - 115px);
+      width: calc(100% - 165px);
       min-height: 100px;
       border-radius: 8px;
       padding: 10px;
@@ -89,9 +96,10 @@
 
     .expanded-side {
       margin-left: 15px;
-      width: 100px;
-      height: 100px;
+      width: 150px;
+      height: 150px;
       border-radius: 8px;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;

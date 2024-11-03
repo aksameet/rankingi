@@ -1,8 +1,7 @@
-<google-map
-  [center]="center"
-  [zoom]="zoom"
-  height="100px"
-  width="100px"
-  (mapReady)="onMapReady($event)"
->
+<google-map [center]="center" [zoom]="zoom" height="150px" width="150px">
+  <map-marker
+    #mapMarker="mapMarker"
+    [position]="center"
+    (mapClick)="openInfoWindow(mapMarker)"
+  ></map-marker>
 </google-map>

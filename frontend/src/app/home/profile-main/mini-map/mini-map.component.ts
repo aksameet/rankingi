@@ -1,5 +1,9 @@
-import { Component, Input, ViewChild, AfterViewInit } from '@angular/core';
-import { GoogleMap, GoogleMapsModule } from '@angular/google-maps';
+import { Component, Input, ViewChild } from '@angular/core';
+import {
+  GoogleMapsModule,
+  MapInfoWindow,
+  MapMarker,
+} from '@angular/google-maps';
 
 @Component({
   standalone: true,
@@ -8,6 +12,7 @@ import { GoogleMap, GoogleMapsModule } from '@angular/google-maps';
   templateUrl: './mini-map.component.html',
 })
 export class MiniMapComponent {
+  @ViewChild(MapInfoWindow) infoWindow: MapInfoWindow | undefined;
   @Input() latitude!: number;
   @Input() longitude!: number;
 
@@ -15,7 +20,7 @@ export class MiniMapComponent {
     lat: 52.069167,
     lng: 19.480278,
   };
-  zoom = 8;
+  zoom = 14;
 
   ngOnInit(): void {
     this.center = {
@@ -24,12 +29,9 @@ export class MiniMapComponent {
     };
   }
 
-  onMapReady(map: any): void {
-    console.log(map);
-    // Create the AdvancedMarkerElement
-    const marker = new google.maps.marker.AdvancedMarkerElement({
-      position: this.center,
-      map: map,
-    });
+  openInfoWindow(marker: MapMarker): void {
+    if (this.infoWindow) {
+      this.infoWindow.open(marker);
+    }
   }
 }

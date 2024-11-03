@@ -53,6 +53,11 @@
         <p>{{ profile.description }}</p>
       </div>
     </div>
-    <div class="expanded-side">Mapa</div>
+    <div class="expanded-side">
+      <app-mini-map
+        [latitude]="latitude"
+        [longitude]="longitude"
+      ></app-mini-map>
+    </div>
   </div>
 </mat-card>

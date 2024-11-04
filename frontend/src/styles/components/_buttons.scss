@@ -1,8 +1,10 @@
 @use "../themes" as themes;
 
 @mixin buttons($theme) {
-  .mat-mdc-raised-button:not(:disabled) {
+  .mat-mdc-raised-button:not(:disabled),
+  .mat-mdc-button:not(:disabled) {
     background-color: themes.theme-color($theme, accent);
+    color: white;
     &:hover {
       background-color: rgba(themes.theme-color($theme, accent), 0.4);
     }

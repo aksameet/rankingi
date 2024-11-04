@@ -1,8 +1,15 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+} from '@angular/core';
 import {
   GoogleMapsModule,
   MapInfoWindow,
   MapMarker,
+  GoogleMap,
 } from '@angular/google-maps';
 
 @Component({
@@ -10,9 +17,10 @@ import {
   selector: 'app-mini-map',
   imports: [GoogleMapsModule],
   templateUrl: './mini-map.component.html',
+  styleUrls: ['./mini-map.component.scss'],
 })
 export class MiniMapComponent {
-  @ViewChild(MapInfoWindow) infoWindow: MapInfoWindow | undefined;
+  @ViewChild(GoogleMap) map!: GoogleMap;
   @Input() latitude!: number;
   @Input() longitude!: number;
 
@@ -30,8 +38,8 @@ export class MiniMapComponent {
   }
 
   openInfoWindow(marker: MapMarker): void {
-    if (this.infoWindow) {
-      this.infoWindow.open(marker);
-    }
+    // if (this.infoWindow) {
+    //   this.infoWindow.open(marker);
+    // }
   }
 }

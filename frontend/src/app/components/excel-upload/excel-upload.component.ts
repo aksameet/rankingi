@@ -147,6 +147,7 @@ export class ExcelUploadComponent implements OnChanges {
           'website',
           'city',
           'company',
+          'own_stars',
         ];
         const missingHeaders = requiredHeaders.filter(
           (header) => !headers.includes(header)
@@ -324,6 +325,7 @@ export class ExcelUploadComponent implements OnChanges {
       website: item.website,
       city: item.city,
       company: item.company,
+      own_stars: item.own_stars,
     }));
 
     this.profileService

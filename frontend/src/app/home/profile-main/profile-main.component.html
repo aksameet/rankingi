@@ -1,8 +1,4 @@
-<mat-card
-  class="profile-card"
-  [class.expanded]="expanded"
-  (click)="toggleExpanded()"
->
+<mat-card class="profile-card" [class.expanded]="expanded">
   <div *ngIf="profile.rank" class="rank">{{ profile.rank }}</div>
   <mat-card-header>
     <div mat-card-avatar class="profile-avatar">
@@ -28,9 +24,20 @@
         [rating]="profile.stars"
         [opinions]="profile.opinions"
       ></app-rating>
+      <p *ngIf="profile.stars">Opinie firmowe: {{ profile.own_stars }}</p>
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
+    <button
+      class="!absolute top-0 right-0 expand-toggle"
+      [ngClass]="{ expanded: expanded }"
+      mat-button
+      color="primary"
+      (click)="toggleExpanded()"
+    >
+      <mat-icon>get_app</mat-icon>
+    </button>
+
     <div *ngIf="profile.address">
       <b>Lokalizacja:</b>
       <p>{{ profile.address }}</p>
@@ -62,6 +69,7 @@
     </div>
     <div class="expanded-side">
       <app-mini-map
+        *ngIf="expanded"
         [latitude]="latitude"
         [longitude]="longitude"
       ></app-mini-map>

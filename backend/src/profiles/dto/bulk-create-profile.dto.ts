@@ -61,6 +61,9 @@ export class CreateProfileDto {
 
   @IsString()
   company!: string;
+
+  @IsString()
+  own_stars!: string;
 }
 
 export class BulkCreateProfileDto {

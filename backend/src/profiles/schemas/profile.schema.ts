@@ -55,6 +55,9 @@ export class Profile {
 
   @Prop()
   company?: string;
+
+  @Prop()
+  own_stars?: string;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);

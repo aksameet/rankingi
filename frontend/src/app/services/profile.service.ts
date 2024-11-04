@@ -20,6 +20,7 @@ export interface Profile {
   website?: string;
   city: string;
   company?: string;
+  own_stars?: string;
 }
 
 @Injectable({

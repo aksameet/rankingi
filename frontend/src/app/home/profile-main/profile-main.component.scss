@@ -8,6 +8,7 @@
   padding: 15px 15px 0;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -81,7 +82,7 @@
   .expanded-content {
     width: 100%;
     padding: 0;
-    padding-left: 120px;
+    padding-left: 110px;
     transition: padding 0.2s ease-in-out;
 
     display: flex;
@@ -99,10 +100,31 @@
       width: 150px;
       height: 150px;
       border-radius: 8px;
-      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
+      .hidden {
+        height: 0;
+      }
+    }
+  }
+}
+
+.expand-toggle {
+  padding: 0;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  .mat-icon {
+    margin: auto;
+    font-size: 30px;
+    height: 30px;
+    width: 30px;
+    transition: all 0.3s ease-in-out;
+  }
+  &.expanded {
+    .mat-icon {
+      transform: rotate(180deg);
     }
   }
 }

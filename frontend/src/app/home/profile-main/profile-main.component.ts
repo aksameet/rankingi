@@ -43,6 +43,7 @@ export class ProfileMainComponent {
   expanded: boolean = false;
   latitude!: number;
   longitude!: number;
+  mapReady: boolean = false;
 
   ngOnInit(): void {
     if (this.profile.geolocation) {

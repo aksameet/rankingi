@@ -10,6 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatPaginatorModule } from '@angular/material/paginator';
 // Add more imports as needed
 
 const materialModules = [
@@ -23,6 +24,7 @@ const materialModules = [
   MatDialogModule,
   MatDialogModule,
   MatSlideToggleModule,
+  MatPaginatorModule,
   // Add more modules here
 ];
 

@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ProfileMainComponent } from './profile-main/profile-main.component';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/modules/material.module';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-home',
@@ -25,9 +26,12 @@ import { MaterialModule } from '../shared/modules/material.module';
 export class HomeComponent {
   $loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   profiles: Profile[] = [];
+  paginatedProfiles: Profile[] = [];
   selectedType: string = 'profiles';
   selectedCity: string = '';
   isLogIn$!: any;
+  pageSize = 25;
+  currentPage = 0;
 
   constructor(
     private router: Router,
@@ -57,11 +61,13 @@ export class HomeComponent {
           this.$loading.next(false);
           this.profiles = data;
           this.sortProfiles();
+          this.setPaginatedProfiles();
           console.log('Load Data =>', data);
         },
         error: (error) => {
           this.$loading.next(false);
           this.profiles = [];
+          this.paginatedProfiles = [];
         },
       });
   }
@@ -87,14 +93,29 @@ export class HomeComponent {
     });
   }
 
+  setPaginatedProfiles() {
+    const startIndex = this.currentPage * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.paginatedProfiles = this.profiles.slice(startIndex, endIndex);
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.setPaginatedProfiles();
+  }
+
   onTypeChanged(selectedType: string) {
     this.profiles = [];
+    this.paginatedProfiles = [];
     this.selectedType = selectedType;
+    this.currentPage = 0;
     this.loadProfiles();
   }
 
   onCityChanged(selectedCity: string) {
     this.selectedCity = selectedCity;
+    this.currentPage = 0;
     this.loadProfiles();
   }
 }

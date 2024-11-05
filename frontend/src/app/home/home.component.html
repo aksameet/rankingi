@@ -48,6 +48,17 @@
         <mat-option value="wroclaw">Wrocław</mat-option>
       </mat-select>
     </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Sort by Score</mat-label>
+      <mat-select
+        [(value)]="sortOrder"
+        (selectionChange)="onSortOrderChanged($event.value)"
+      >
+        <mat-option value="desc">Descending</mat-option>
+        <mat-option value="asc">Ascending</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
   <h1 *ngIf="!profiles">Nothing to see from server</h1>
   <app-profile-main

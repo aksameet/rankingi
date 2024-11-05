@@ -28,6 +28,7 @@ export class HomeComponent {
   paginatedProfiles: Profile[] = [];
   selectedType: string = 'profiles';
   selectedCity: string = '';
+  sortOrder: string = 'desc';
   isLogIn$!: any;
   pageSize = 25;
   currentPage = 0;
@@ -81,11 +82,11 @@ export class HomeComponent {
   }
 
   sortProfiles() {
-    this.profiles.sort((a, b) => {
-      const scoreA = a.score ?? 0;
-      const scoreB = b.score ?? 0;
-      return scoreB - scoreA;
-    });
+    if (this.sortOrder === 'desc') {
+      this.profiles.sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+    } else {
+      this.profiles.sort((a, b) => (a.score ?? 0) - (b.score ?? 0));
+    }
   }
 
   setPaginatedProfiles() {
@@ -112,5 +113,11 @@ export class HomeComponent {
     this.selectedCity = selectedCity;
     this.currentPage = 0;
     this.loadProfiles();
+  }
+
+  onSortOrderChanged(order: string) {
+    this.sortOrder = order;
+    this.sortProfiles();
+    this.setPaginatedProfiles();
   }
 }

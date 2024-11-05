@@ -1,0 +1,55 @@
+@use "../themes" as themes;
+
+@mixin paginator($theme) {
+  .mat-mdc-paginator {
+    background-color: themes.theme-color($theme, secondary);
+    color: themes.theme-color($theme, text);
+
+    width: 100%;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+
+    .mat-mdc-paginator-range-label,
+    .mat-mdc-paginator-page-size {
+      color: themes.theme-color($theme, text);
+    }
+
+    .mat-mdc-paginator-navigation-first:not(.mat-mdc-button-disabled),
+    .mat-mdc-paginator-navigation-last:not(.mat-mdc-button-disabled),
+    .mat-mdc-paginator-navigation-previous:not(.mat-mdc-button-disabled),
+    .mat-mdc-paginator-navigation-next:not(.mat-mdc-button-disabled) {
+      .mat-mdc-paginator-icon {
+        fill: themes.theme-color($theme, text);
+      }
+
+      &:hover {
+        color: rgba(themes.theme-color($theme, accent), 0.4);
+      }
+    }
+
+    .mat-mdc-paginator-icon {
+      color: themes.theme-color($theme, text);
+    }
+
+    .mat-mdc-paginator-page-size-label {
+      color: themes.theme-color($theme, text);
+    }
+
+    .mat-mdc-paginator-page-size-select {
+      .mat-mdc-select-trigger {
+        background-color: themes.theme-color($theme, secondary);
+        color: themes.theme-color($theme, text);
+
+        &:hover {
+          background-color: rgba(themes.theme-color($theme, accent), 0.4);
+        }
+      }
+
+      .mat-mdc-select-arrow {
+        color: themes.theme-color($theme, text);
+      }
+    }
+  }
+}

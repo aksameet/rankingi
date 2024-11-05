@@ -1,10 +1,13 @@
-<google-map [center]="center" [zoom]="zoom" height="150px" width="150px">
-  <map-marker
-    #mapMarker="mapMarker"
-    [position]="center"
-    (mapClick)="openInfoWindow(mapMarker)"
-  ></map-marker>
-  <!-- <map-info-window>
-    <p>Fucvk</p>
-  </map-info-window> -->
-</google-map>
+<div *ngIf="initMap">
+  <google-map [center]="center" [zoom]="zoom" height="150px" width="150px">
+    <map-marker
+      #mapMarker="mapMarker"
+      [position]="center"
+      (mapClick)="openInfoWindow(mapMarker)"
+    ></map-marker>
+    <!-- <map-info-window>
+      <p>Fucvk</p>
+    </map-info-window> -->
+  </google-map>
+</div>
+<mat-spinner *ngIf="!initMap"></mat-spinner>

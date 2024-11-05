@@ -32,7 +32,7 @@ export class ProfileFormComponent implements OnInit {
     this.profileForm = new FormGroup({
       name: new FormControl('', Validators.required),
       email: new FormControl('', Validators.email),
-      rank: new FormControl(0),
+      score: new FormControl(0),
       city: new FormControl('', Validators.required),
       image: new FormControl(null),
       company: new FormControl(null),
@@ -42,7 +42,7 @@ export class ProfileFormComponent implements OnInit {
       this.profileForm.patchValue({
         name: data.profile.name,
         email: data.profile.email,
-        rank: data.profile.rank,
+        score: data.profile.score,
         city: data.profile.city,
         image: data.profile.image,
         company: data.profile.company,

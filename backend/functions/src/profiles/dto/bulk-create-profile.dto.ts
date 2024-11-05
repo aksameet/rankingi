@@ -26,7 +26,7 @@ export class CreateProfileDto {
 
   @IsNumber()
   @IsOptional()
-  rank?: number;
+  score?: number;
 
   @IsString()
   @IsOptional()

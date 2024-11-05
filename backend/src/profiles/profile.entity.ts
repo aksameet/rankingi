@@ -9,7 +9,7 @@ export class Profile {
   name!: string;
 
   @Column()
-  rank!: number;
+  score!: number;
 
   @Column()
   email!: string;

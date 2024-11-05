@@ -2,13 +2,6 @@ import { Component, Input } from '@angular/core';
 import { Profile } from '../../services/profile.service';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../shared/modules/material.module';
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-} from '@angular/animations';
 import { RatingComponent } from './rating/rating.component';
 import { MiniMapComponent } from './mini-map/mini-map.component';
 

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
@@ -59,10 +58,13 @@ export class HomeComponent {
       .subscribe({
         next: (data) => {
           this.$loading.next(false);
-          this.profiles = data;
+          this.profiles = data.map((profile) => ({
+            ...profile,
+            score: this.computeScore(profile.opinions ?? 0, profile.stars ?? 0),
+          }));
           this.sortProfiles();
           this.setPaginatedProfiles();
-          console.log('Load Data =>', data);
+          console.log('Load Data =>', this.profiles);
         },
         error: (error) => {
           this.$loading.next(false);
@@ -72,24 +74,17 @@ export class HomeComponent {
       });
   }
 
+  computeScore(opinions: number, stars: number): number {
+    const starWeight = 10;
+    const opinionWeight = 1;
+    return stars * starWeight + opinions * opinionWeight;
+  }
+
   sortProfiles() {
     this.profiles.sort((a, b) => {
-      const rankA = a.rank;
-      const rankB = b.rank;
-
-      const isRankANull = rankA == null || rankA === 0;
-      const isRankBNull = rankB == null || rankB === 0;
-
-      if (isRankANull && isRankBNull) {
-        return 0;
-      }
-      if (isRankANull) {
-        return 1;
-      }
-      if (isRankBNull) {
-        return -1;
-      }
-      return rankA - rankB;
+      const scoreA = a.score ?? 0;
+      const scoreB = b.score ?? 0;
+      return scoreB - scoreA;
     });
   }
 

@@ -10,7 +10,7 @@ export interface Profile {
   address?: string;
   telephone?: string;
   email?: string;
-  rank?: number;
+  score?: number;
   image?: string;
   description?: string;
   specialization?: string;

@@ -65,22 +65,22 @@ export class ProfileComponent implements OnInit {
 
   sortProfiles() {
     this.profiles.sort((a, b) => {
-      const rankA = a.rank;
-      const rankB = b.rank;
+      const scoreA = a.score;
+      const scoreB = b.score;
 
-      const isRankANull = rankA == null || rankA === 0;
-      const isRankBNull = rankB == null || rankB === 0;
+      const isscoreANull = scoreA == null || scoreA === 0;
+      const isscoreBNull = scoreB == null || scoreB === 0;
 
-      if (isRankANull && isRankBNull) {
+      if (isscoreANull && isscoreBNull) {
         return 0;
       }
-      if (isRankANull) {
+      if (isscoreANull) {
         return 1;
       }
-      if (isRankBNull) {
+      if (isscoreBNull) {
         return -1;
       }
-      return rankA - rankB;
+      return scoreA - scoreB;
     });
   }
 

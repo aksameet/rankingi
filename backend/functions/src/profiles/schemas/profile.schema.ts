@@ -27,7 +27,7 @@ export class Profile {
   email?: string;
 
   @Prop()
-  rank?: number;
+  score?: number;
 
   @Prop()
   image?: string;

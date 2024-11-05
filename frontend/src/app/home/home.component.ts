@@ -115,8 +115,8 @@ export class HomeComponent {
     this.loadProfiles();
   }
 
-  onSortOrderChanged(order: string) {
-    this.sortOrder = order;
+  toggleSortOrder() {
+    this.sortOrder = this.sortOrder === 'desc' ? 'asc' : 'desc';
     this.sortProfiles();
     this.setPaginatedProfiles();
   }

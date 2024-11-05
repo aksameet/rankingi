@@ -1,4 +1,4 @@
-<mat-card class="profile-card" [class.expanded]="expanded">
+<mat-card class="profile-card">
   <div *ngIf="profile.rank" class="rank">{{ profile.rank }}</div>
   <mat-card-header>
     <div mat-card-avatar class="profile-avatar">
@@ -55,10 +55,7 @@
       <p>{{ profile.specialization }}</p>
     </div>
   </mat-card-content>
-  <div
-    [@slideToggle]="expanded ? 'expanded' : 'collapsed'"
-    class="expanded-content"
-  >
+  <div [ngClass]="expanded ? 'expanded' : 'collapsed'" class="expanded-content">
     <div class="expanded-main">
       <p>
         <b>Dodatkowe informacje o {{ profile.name }}</b>

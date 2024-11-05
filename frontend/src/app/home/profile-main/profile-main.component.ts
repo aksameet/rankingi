@@ -18,25 +18,6 @@ import { MiniMapComponent } from './mini-map/mini-map.component';
   imports: [CommonModule, MaterialModule, RatingComponent, MiniMapComponent],
   templateUrl: './profile-main.component.html',
   styleUrls: ['./profile-main.component.scss'],
-  animations: [
-    trigger('slideToggle', [
-      state(
-        'collapsed',
-        style({
-          height: '0px',
-          overflow: 'hidden',
-        })
-      ),
-      state(
-        'expanded',
-        style({
-          height: '*',
-          overflow: 'hidden',
-        })
-      ),
-      transition('collapsed <=> expanded', animate('200ms ease-in-out')),
-    ]),
-  ],
 })
 export class ProfileMainComponent {
   @Input() profile!: Profile;

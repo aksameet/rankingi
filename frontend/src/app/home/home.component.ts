@@ -7,7 +7,8 @@ import { BehaviorSubject } from 'rxjs';
 import { ProfileMainComponent } from './profile-main/profile-main.component';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/modules/material.module';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
+import { ThemeToggleComponent } from '../components/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-home',
@@ -18,6 +19,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
     ProfileMainComponent,
     FormsModule,
     MaterialModule,
+    ThemeToggleComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],

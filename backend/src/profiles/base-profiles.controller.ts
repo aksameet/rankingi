@@ -14,7 +14,7 @@ import { ProfilesService } from './profiles.service';
 import {
   CreateProfileDto,
   BulkCreateProfileDto,
-} from './dto/bulk-create-profile.dto';
+} from './dto/create-profile.dto';
 import { ProfileDocument } from './schemas/profile.schema';
 import { AuthGuard } from '@nestjs/passport';
 

@@ -36,6 +36,13 @@
           <input matInput type="text" formControlName="company" />
         </mat-form-field>
 
+        <mat-checkbox
+          [checked]="profileForm.get('own_stars')?.value === 'yes'"
+          (change)="onCheckboxChange($event)"
+        >
+          Own Stars
+        </mat-checkbox>
+
         <mat-form-field appearance="outline" class="city">
           <mat-label>City</mat-label>
           <mat-select formControlName="city">

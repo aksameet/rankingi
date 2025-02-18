@@ -38,7 +38,8 @@
   </mat-form-field>
 </div>
 
-<h1 *ngIf="profiles">Nothing from server</h1>
+<h1 *ngIf="!profiles">No profiles uploaded from server</h1>
+<h3 [style.color]="'red'" *ngIf="error">{{ error }}</h3>
 
 <div class="flex items-start gap-2">
   <button mat-raised-button color="primary" (click)="openAddProfileDialog()">

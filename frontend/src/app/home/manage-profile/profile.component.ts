@@ -33,6 +33,7 @@ export class ProfileComponent implements OnInit {
   selectedType: string = 'profiles';
   selectedCity: string = '';
   saveMessage: string = '';
+  error: string = '';
 
   constructor(
     private profileService: ProfileService,
@@ -121,7 +122,7 @@ export class ProfileComponent implements OnInit {
         },
         error: (error) => {
           this.$loading.next(false);
-          console.error('Error creating profile:', error);
+          this.error = error?.error?.message;
         },
       });
   }

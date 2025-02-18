@@ -10,7 +10,7 @@ import { ProfileDocument, ProfileSchema } from './schemas/profile.schema';
 import {
   CreateProfileDto,
   BulkCreateProfileDto,
-} from './dto/bulk-create-profile.dto';
+} from './dto/create-profile.dto';
 
 @Injectable()
 export class ProfilesService {
@@ -46,7 +46,21 @@ export class ProfilesService {
   ): Promise<ProfileDocument> {
     const model = this.getModel(collectionName);
     const createdProfile = new model(profileData);
-    return createdProfile.save();
+
+    try {
+      return await createdProfile.save();
+    } catch (error) {
+      // Option A: If you want to handle specific codes (like duplicate key)
+      if (error?.code === 11000) {
+        // Duplicate key error, e.g., unique email
+        throw new BadRequestException(
+          `User "${profileData.email}" already exists.`,
+        );
+      }
+
+      // Option B: Otherwise, throw a generic error that includes the original message
+      throw new BadRequestException(error.message);
+    }
   }
 
   async createBulkProfiles(

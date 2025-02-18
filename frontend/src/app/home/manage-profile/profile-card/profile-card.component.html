@@ -26,6 +26,10 @@
       Website:
       <p>{{ profile.website }}</p>
     </div>
+    <div *ngIf="profile.company">
+      Company:
+      <p>{{ profile.company }}</p>
+    </div>
   </mat-card-content>
   <mat-card-actions align="end">
     <button mat-icon-button color="warn" (click)="onDelete()">

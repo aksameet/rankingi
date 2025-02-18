@@ -37,7 +37,7 @@ export class ExcelHelperService {
       { header: 'website', key: 'website', width: 20 },
       { header: 'city', key: 'city', width: 15 },
       { header: 'company', key: 'company', width: 25 },
-      { header: 'own_stars', key: 'company', width: 10 },
+      { header: 'own_stars', key: 'own_stars', width: 10 },
     ];
 
     profiles.forEach((profile) => {

@@ -1,7 +1,7 @@
 // src/app/profile.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 
 export interface Profile {
   id?: string;
@@ -47,7 +47,12 @@ export class ProfileService {
 
   createProfile(profile: Profile, type: string): Observable<Profile> {
     const apiUrl = `${this.apiBaseUrl}/${type}`;
-    return this.http.post<Profile>(apiUrl, profile);
+    return this.http.post<Profile>(apiUrl, profile).pipe(
+      catchError((error) => {
+        // return an observable that errors out
+        return throwError(() => error);
+      })
+    );
   }
 
   updateProfile(profile: Profile, type: string): Observable<Profile> {

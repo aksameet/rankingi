@@ -11,6 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 import { MaterialModule } from '../../../shared/modules/material.module';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import imageCompression from 'browser-image-compression';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-profile-form',
@@ -35,7 +36,9 @@ export class ProfileFormComponent implements OnInit {
       score: new FormControl(0),
       city: new FormControl('', Validators.required),
       image: new FormControl(null),
-      company: new FormControl(null),
+      company: new FormControl(''),
+      rank: new FormControl(null),
+      own_stars: new FormControl('No'),
     });
     if (data && data.profile) {
       this.editingProfileId = data.profile.id || null;
@@ -46,6 +49,8 @@ export class ProfileFormComponent implements OnInit {
         city: data.profile.city,
         image: data.profile.image,
         company: data.profile.company,
+        rank: data.profile.rank,
+        own_stars: data.profile.own_stars === 'Yes' ? true : false,
       });
       if (data.profile.image) {
         this.selectedImage = 'data:image/jpeg;base64,' + data.profile.image;
@@ -109,5 +114,15 @@ export class ProfileFormComponent implements OnInit {
 
   resetForm() {
     this.dialogRef.close();
+  }
+
+  onCheckboxChange(event: MatCheckboxChange): void {
+    // Convert boolean to 'yes' or 'no'
+    const stringValue = event.checked ? 'Yes' : 'No';
+
+    // Update the FormControl value
+    this.profileForm.patchValue({
+      own_stars: stringValue,
+    });
   }
 }

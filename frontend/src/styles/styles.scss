@@ -1,37 +1,10 @@
-@use "themes" as themes;
-@use "components" as components;
+@use "variables";
 
 @import "@angular/material/prebuilt-themes/deeppurple-amber.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.light-theme,
-.light-theme body {
-  background-color: themes.theme-color(light, background);
-  color: themes.theme-color(light, input-text);
-}
-
-.dark-theme,
-.dark-theme body {
-  background-color: themes.theme-color(dark, background);
-  color: themes.theme-color(dark, white);
-}
-
-.light-theme {
-  @include components.buttons(light);
-  @include components.cards(light);
-  @include components.forms(light);
-  @include components.paginator(light);
-}
-
-.dark-theme {
-  @include components.buttons(dark);
-  @include components.cards(dark);
-  @include components.forms(dark);
-  @include components.paginator(dark);
-}
 
 html,
 body {

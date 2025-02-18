@@ -8,7 +8,7 @@ import { ProfileMainComponent } from './profile-main/profile-main.component';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/modules/material.module';
 import { PageEvent } from '@angular/material/paginator';
-import { ThemeToggleComponent } from '../components/theme-toggle/theme-toggle.component';
+import { TopNavComponent } from './top-nav/top-nav.component';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +19,7 @@ import { ThemeToggleComponent } from '../components/theme-toggle/theme-toggle.co
     ProfileMainComponent,
     FormsModule,
     MaterialModule,
-    ThemeToggleComponent,
+    TopNavComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],

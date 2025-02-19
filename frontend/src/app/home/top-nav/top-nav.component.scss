@@ -1,14 +1,16 @@
 @import "variables";
 
-.top-nav {
+:host {
   width: 100%;
+}
+.top-nav {
   position: sticky;
   z-index: 10;
   width: 100%;
-  margin: 5px 20px;
+  padding: 5px 20px;
   top: 0;
 
   .content {
-    width: $max-width;
+    max-width: $max-width;
   }
 }

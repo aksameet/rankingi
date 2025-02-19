@@ -7,7 +7,7 @@ import { Profile } from './profile.service';
 @Injectable({
   providedIn: 'root',
 })
-export class ExcelHelperService {
+export class DownloadProfilesToExcelService {
   constructor() {}
 
   downloadProfilesAsExcel(

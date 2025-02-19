@@ -27,6 +27,7 @@ const materialModules = [
   MatSlideToggleModule,
   MatPaginatorModule,
   MatCheckboxModule,
+  MatDialogModule,
   // Add more modules here
 ];
 

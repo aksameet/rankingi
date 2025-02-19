@@ -43,6 +43,8 @@ export class HomeComponent {
 
   ngOnInit(): void {
     this.isLogIn$ = this.authService.isLoggedIn$;
+    // TODO - remove on PROD:
+    this.authService.checkAuth().subscribe();
     this.loadProfiles();
   }
 

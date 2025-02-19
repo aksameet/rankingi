@@ -37,7 +37,6 @@ export class ProfileFormComponent implements OnInit {
       city: new FormControl('', Validators.required),
       image: new FormControl(null),
       company: new FormControl(''),
-      rank: new FormControl(null),
       own_stars: new FormControl('No'),
     });
     if (data && data.profile) {
@@ -49,7 +48,6 @@ export class ProfileFormComponent implements OnInit {
         city: data.profile.city,
         image: data.profile.image,
         company: data.profile.company,
-        rank: data.profile.rank,
         own_stars: data.profile.own_stars === 'Yes' ? true : false,
       });
       if (data.profile.image) {

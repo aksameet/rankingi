@@ -1,6 +1,7 @@
+// auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, tap, map, BehaviorSubject } from 'rxjs';
+import { Observable, of, tap, map, BehaviorSubject, catchError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -47,6 +48,11 @@ export class AuthService {
         map((response) => {
           this.isLoggedInSubject.next(response.authenticated);
           return response.authenticated;
+        }),
+        catchError((err) => {
+          // On error (e.g. 401), update state and return false
+          this.isLoggedInSubject.next(false);
+          return of(false);
         })
       );
   }

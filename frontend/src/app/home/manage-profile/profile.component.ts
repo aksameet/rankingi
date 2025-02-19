@@ -7,11 +7,11 @@ import { FormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { MaterialModule } from '../../shared/modules/material.module';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
-import { ExcelHelperService } from '../../services/excel-helper.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
 import { ExcelUploadComponent } from '../../components/excel-upload/excel-upload.component';
 import { AuthService } from '../../services/auth/auth.service';
+import { DownloadProfilesToExcelService } from '../../services/download-profiles.service';
 
 @Component({
   selector: 'app-profile',
@@ -37,7 +37,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private profileService: ProfileService,
-    private excelHelperService: ExcelHelperService,
+    private downloadProfilesToExcel: DownloadProfilesToExcelService,
     private dialog: MatDialog,
     private authService: AuthService,
     private router: Router
@@ -55,6 +55,10 @@ export class ProfileComponent implements OnInit {
         next: (data) => {
           this.$loading.next(false);
           this.profiles = data;
+          this.profiles = data.map((profile) => ({
+            ...profile,
+            score: this.computeScore(profile.opinions ?? 0, profile.stars ?? 0),
+          }));
           this.sortProfiles();
         },
         error: (error) => {
@@ -62,6 +66,12 @@ export class ProfileComponent implements OnInit {
           this.profiles = [];
         },
       });
+  }
+
+  computeScore(opinions: number, stars: number): number {
+    const starWeight = 10;
+    const opinionWeight = 1;
+    return stars * starWeight + opinions * opinionWeight;
   }
 
   sortProfiles() {
@@ -216,7 +226,7 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    this.excelHelperService.downloadProfilesAsExcel(
+    this.downloadProfilesToExcel.downloadProfilesAsExcel(
       this.profiles,
       `${this.selectedType}_${this.selectedCity}`,
       'createdDate'
